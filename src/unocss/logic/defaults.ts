@@ -4,6 +4,7 @@ import { presetWind4, transformerDirectives, transformerVariantGroup } from 'uno
 import { presetNuxtUI, presetNuxtUIExtra } from '../../preset'
 import {
   defaultPipelineInclude,
+  getRequiredNuxtUiFilesystemContent,
   getRequiredNuxtUiPipelineInclude,
 } from './pipeline'
 
@@ -104,6 +105,21 @@ function ensurePipelineInclude(config: Record<string, any>, context: NuxtUiPipel
   ])
 }
 
+function ensureFilesystemContent(config: Record<string, any>, context: NuxtUiPipelineContext = {}) {
+  const requiredFilesystemContent = getRequiredNuxtUiFilesystemContent(context)
+  if (requiredFilesystemContent.length === 0) {
+    return
+  }
+
+  config.content ||= {}
+
+  const filesystem = toArray<string>(config.content.filesystem as string | string[])
+  config.content.filesystem = Array.from(new Set([
+    ...filesystem,
+    ...requiredFilesystemContent,
+  ]))
+}
+
 export function applyNuxtUiUnoDefaults(config: Record<string, any>, context: NuxtUiPipelineContext = {}) {
   config.outputToCssLayers ??= true
 
@@ -118,4 +134,5 @@ export function applyNuxtUiUnoDefaults(config: Record<string, any>, context: Nux
   replaceTransformer(config, variantGroupTransformerName, () => transformerVariantGroup({ separators: [':'] }))
 
   ensurePipelineInclude(config, context)
+  ensureFilesystemContent(config, context)
 }

@@ -1,6 +1,7 @@
-<script setup>
-</script>
-
 <template>
-  <div>basic</div>
+  <UApp>
+    <UButton color="success">
+      Button
+    </UButton>
+  </UApp>
 </template>

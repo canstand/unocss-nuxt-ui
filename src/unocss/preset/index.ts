@@ -11,7 +11,7 @@ export interface PresetOptions {
   colorSpace?: string
   preflights?: boolean | Preset['preflights']
   safelist?: boolean
-  theme?: Parameters<typeof resolveTheme>[0]['theme']
+  theme?: NonNullable<Parameters<typeof resolveTheme>[0]>['theme']
 }
 
 export const presetNuxtUI = definePreset((options: PresetOptions = {}) => {

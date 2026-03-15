@@ -2,9 +2,23 @@
   "name": "unocss-nuxt-ui",
   "type": "module",
   "version": "1.0.0",
-  "description": "My new Nuxt module",
+  "description": "Use UnoCSS with Nuxt UI without Tailwind CSS",
   "license": "MIT",
+  "homepage": "https://github.com/canstand/unocss-nuxt-ui#readme",
   "repository": "canstand/unocss-nuxt-ui",
+  "bugs": {
+    "url": "https://github.com/canstand/unocss-nuxt-ui/issues"
+  },
+  "keywords": [
+    "nuxt",
+    "nuxt-module",
+    "nuxt-ui",
+    "unocss",
+    "unocss-preset",
+    "tailwindcss",
+    "tailwind-replacement",
+    "atomic-css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
@@ -42,9 +56,9 @@
   },
   "peerDependencies": {
     "@nuxt/ui": ">=4.0.0",
-    "@unocss/nuxt": ">=0.60.0",
+    "@unocss/nuxt": ">=0.66.0",
     "nuxt": ">=3.10.0",
-    "unocss": ">=0.60.0"
+    "unocss": ">=0.66.0"
   },
   "dependencies": {
     "@nuxt/kit": "catalog:",

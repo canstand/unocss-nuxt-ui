@@ -51,7 +51,7 @@ export default defineNuxtPlugin(() => {
   const appConfig = useAppConfig()
   const nuxtApp = useNuxtApp()
 
-  const runtimeCss = computed(() => {
+  const compatibilityCss = computed(() => {
     const uiConfig = resolveUiConfig(appConfig.ui)
     const uiColors = uiConfig.colors || {}
     const entries = Object.entries(uiColors)
@@ -75,21 +75,21 @@ export default defineNuxtPlugin(() => {
 }`
   })
 
-  if (!runtimeCss.value) {
+  if (!compatibilityCss.value) {
     return
   }
 
   const headData: UseHeadInput = {
     style: [{
-      innerHTML: () => runtimeCss.value,
+      innerHTML: () => compatibilityCss.value,
       tagPriority: -2,
       id: 'nuxt-ui-runtime-colors',
     }],
   }
 
-  if (import.meta.client && nuxtApp.isHydrating && !nuxtApp.payload.serverRendered && runtimeCss.value) {
+  if (import.meta.client && nuxtApp.isHydrating && !nuxtApp.payload.serverRendered && compatibilityCss.value) {
     const style = document.createElement('style')
-    style.innerHTML = runtimeCss.value
+    style.innerHTML = compatibilityCss.value
     style.setAttribute('data-nuxt-ui-runtime-colors', '')
     document.head.appendChild(style)
 

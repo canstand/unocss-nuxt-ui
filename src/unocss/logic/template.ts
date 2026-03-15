@@ -1,11 +1,9 @@
 import type { NuxtUiPipelineContext } from './pipeline'
-import { resolve } from 'node:path'
 import { findPath } from 'nuxt/kit'
 import {
   defaultPipelineInclude,
-  getNuxtUiBuildIncludeRuntimeTemplateSource,
+  getRequiredNuxtUiFilesystemContent,
   getRequiredNuxtUiPipelineInclude,
-  getSharedNuxtUiPipelineInclude,
 } from './pipeline'
 
 export interface UnoConfigLayerOptions {
@@ -42,23 +40,16 @@ export function getNuxtUiUnoConfigTemplate(
   presetImportPath: string,
   options: NuxtUiUnoConfigTemplateOptions = {},
 ) {
-  const useRuntimeBuildIncludes = Boolean(options.buildDir && options.componentDetection)
-  const includePatterns = useRuntimeBuildIncludes
-    ? getSharedNuxtUiPipelineInclude(options)
-    : getRequiredNuxtUiPipelineInclude(options)
-  const pipelineIncludes = includePatterns
+  const pipelineIncludes = getRequiredNuxtUiPipelineInclude(options)
     .map(pattern => `      ${pattern.toString()},`)
     .join('\n')
-  const runtimeBuildIncludeTemplate = useRuntimeBuildIncludes && options.buildDir
-    ? getNuxtUiBuildIncludeRuntimeTemplateSource(options.buildDir)
-    : ''
-  const configDepsLine = useRuntimeBuildIncludes && options.buildDir
-    ? `  configDeps: [${JSON.stringify(resolve(options.buildDir, 'ui.css'))}],`
+  const filesystemEntries = getRequiredNuxtUiFilesystemContent(options)
+  const filesystemLines = filesystemEntries.length > 0
+    ? `    filesystem: [\n${filesystemEntries.map(entry => `      ${JSON.stringify(entry)},`).join('\n')}\n    ],\n`
     : ''
 
   const imports = [
     `import presetWind4 from '@unocss/preset-wind4'`,
-    ...(useRuntimeBuildIncludes ? [`import { readFileSync } from 'node:fs'`] : []),
     `import { defineConfig, mergeConfigs, transformerDirectives, transformerVariantGroup } from 'unocss'`,
     `import { presetNuxtUI, presetNuxtUIExtra } from ${JSON.stringify(presetImportPath)}`,
     ...layerConfigPaths.map((path, index) => `import layerConfig${index} from ${JSON.stringify(path)}`),
@@ -72,7 +63,6 @@ export function getNuxtUiUnoConfigTemplate(
   return [
     ...imports,
     '',
-    ...(runtimeBuildIncludeTemplate ? [runtimeBuildIncludeTemplate, ''] : []),
     `const config = defineConfig({
   presets: [
     presetNuxtUI(),
@@ -90,12 +80,10 @@ export function getNuxtUiUnoConfigTemplate(
     pipeline: {
       include: [
 ${defaultIncludes}
-${useRuntimeBuildIncludes ? '      ...__nuxtUiBuildIncludes,' : ''}
 ${pipelineIncludes}
       ],
     },
-  },
-${configDepsLine}
+${filesystemLines}  },
   outputToCssLayers: true,
 })`,
     `export default mergeConfigs([${configNames.join(', ')}])`,

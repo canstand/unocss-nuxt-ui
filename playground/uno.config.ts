@@ -1,15 +1,7 @@
-import { mergeConfigs } from 'unocss'
+import { defineConfig, mergeConfigs } from 'unocss'
 import uiUnoConfig from './.nuxt/uno.config.mjs'
 
 export default mergeConfigs([
   uiUnoConfig,
-  {
-    content: {
-      pipeline: {
-        include: [
-          /\.ts$/,
-        ],
-      },
-    },
-  },
+  defineConfig({}),
 ])

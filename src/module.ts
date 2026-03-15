@@ -9,15 +9,12 @@ import {
   findPath,
   logger,
 } from 'nuxt/kit'
-import { buildRuntimeCss, prependCssEntry } from './logic/css'
+import { buildCompatibilityCss, prependCssEntry } from './logic/css'
 import { applyNuxtUiUnoDefaults } from './unocss/logic/defaults'
 import { getNuxtUiUnoConfigTemplate, resolveUnoLayerConfigPaths } from './unocss/logic/template'
 import { isStyleLikeRequest, rewriteTailwindVarSyntaxInApply, stripTailwindVitePlugins } from './vite/transform'
 
-export interface ModuleOptions {
-  runtimeCss?: boolean
-  runtimeColors?: 'manual' | 'app-config'
-}
+export interface ModuleOptions {}
 
 function isComponentDetectionEnabled(nuxt: { options: Record<string, any> }) {
   const ui = nuxt.options.ui
@@ -44,17 +41,27 @@ async function resolveNuxtUiCssContent(nuxt: { options: Record<string, any> }) {
   }
 }
 
-// Export ModuleOptions for consumers
-export type { ModuleOptions }
+async function resolveNuxtAppConfigPaths(nuxt: { options: Record<string, any> }) {
+  const layers = Array.isArray(nuxt.options._layers)
+    ? nuxt.options._layers
+    : []
+
+  const paths = await Promise.all(layers.map(async (layer: any) => {
+    const srcDir = layer?.config?.srcDir || layer?.config?.rootDir
+    if (!srcDir || typeof srcDir !== 'string') {
+      return undefined
+    }
+
+    return await findPath(join(srcDir, 'app.config'))
+  }))
+
+  return Array.from(new Set(paths.filter((path): path is string => typeof path === 'string')))
+}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'unocss-nuxt-ui',
     configKey: 'unocss-nuxt-ui',
-  },
-  defaults: {
-    runtimeCss: true,
-    runtimeColors: 'manual',
   },
   moduleDependencies: {
     '@unocss/nuxt': {
@@ -68,7 +75,7 @@ export default defineNuxtModule<ModuleOptions>({
       version: '>=4.0.1',
     },
   },
-  async setup(options, nuxt) {
+  async setup(_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
     const resolvedPresetPath = await findPath(resolve('./preset')) || resolve('./preset')
 
@@ -81,7 +88,10 @@ export default defineNuxtModule<ModuleOptions>({
           ? optionsWithUno.unocss as UnoConfigLayerOptions
           : undefined
         const componentDetection = isComponentDetectionEnabled(nuxt as unknown as { options: Record<string, any> })
-        const uiCssContent = await resolveNuxtUiCssContent(nuxt as unknown as { options: Record<string, any> })
+        const [uiCssContent, appConfigFiles] = await Promise.all([
+          resolveNuxtUiCssContent(nuxt as unknown as { options: Record<string, any> }),
+          resolveNuxtAppConfigPaths(nuxt as unknown as { options: Record<string, any> }),
+        ])
 
         const layerConfigPaths = userUnoOptions?.nuxtLayers
           ? await resolveUnoLayerConfigPaths(nuxt, userUnoOptions.configFile)
@@ -92,45 +102,51 @@ export default defineNuxtModule<ModuleOptions>({
           resolvedPresetPath,
           {
             buildDir: nuxt.options.buildDir,
+            appConfigFiles,
             componentDetection,
+            dev: nuxt.options.dev,
             uiCssContent,
           },
         )
       },
     })
 
-    nuxt.hook('unocss:config' as any, (config: Record<string, any>) => {
+    nuxt.hook('unocss:config' as any, async (config: Record<string, any>) => {
+      const [uiCssContent, appConfigFiles] = await Promise.all([
+        resolveNuxtUiCssContent(nuxt as unknown as { options: Record<string, any> }),
+        resolveNuxtAppConfigPaths(nuxt as unknown as { options: Record<string, any> }),
+      ])
+
       applyNuxtUiUnoDefaults(config, {
         buildDir: nuxt.options.buildDir,
+        appConfigFiles,
         componentDetection: isComponentDetectionEnabled(nuxt as unknown as { options: Record<string, any> }),
+        dev: nuxt.options.dev,
+        uiCssContent,
       })
     })
 
-    if (options.runtimeCss) {
-      const runtimeCssTemplate = addTemplate({
-        filename: 'unocss-nuxt-ui/runtime.css',
-        write: true,
-        getContents: () => buildRuntimeCss(),
-      })
-      if (runtimeCssTemplate.dst) {
-        nuxt.options.css = prependCssEntry(nuxt.options.css || [], runtimeCssTemplate.dst)
-      }
-
-      const uiEntryPath = await findPath('@nuxt/ui')
-      if (!uiEntryPath) {
-        logger.warn('[unocss-nuxt-ui] Cannot resolve `@nuxt/ui` entry; skip keyframes.css injection.')
-      }
-      else {
-        const keyframesPath = join(dirname(uiEntryPath), 'runtime/keyframes.css')
-        nuxt.options.css = prependCssEntry(nuxt.options.css || [], keyframesPath)
-      }
+    const compatibilityCssTemplate = addTemplate({
+      filename: 'unocss-nuxt-ui/compatibility.css',
+      write: true,
+      getContents: () => buildCompatibilityCss(),
+    })
+    if (compatibilityCssTemplate.dst) {
+      nuxt.options.css = prependCssEntry(nuxt.options.css || [], compatibilityCssTemplate.dst)
     }
 
-    if (options.runtimeColors === 'app-config') {
-      addPlugin({
-        src: resolve('./runtime/colors'),
-      })
+    const uiEntryPath = await findPath('@nuxt/ui')
+    if (!uiEntryPath) {
+      logger.warn('[unocss-nuxt-ui] Cannot resolve `@nuxt/ui` entry; skip keyframes.css injection.')
     }
+    else {
+      const keyframesPath = join(dirname(uiEntryPath), 'runtime/keyframes.css')
+      nuxt.options.css = prependCssEntry(nuxt.options.css || [], keyframesPath)
+    }
+
+    addPlugin({
+      src: resolve('./runtime/colors'),
+    })
 
     nuxt.hook('vite:extend', async ({ config }) => {
       config.plugins ||= []

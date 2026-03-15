@@ -10,7 +10,7 @@ export function prependCssEntry(entries: string[], source: string) {
   return [source, ...entries]
 }
 
-export function buildRuntimeCss() {
+export function buildCompatibilityCss() {
   return `@layer components, base, properties, theme, preflights, shortcuts, default;
 
 body {

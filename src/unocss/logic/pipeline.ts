@@ -10,8 +10,10 @@ interface ParsedUiSources {
 }
 
 export interface NuxtUiPipelineContext {
+  appConfigFiles?: string[]
   buildDir?: string
   componentDetection?: boolean
+  dev?: boolean
   includeAppConfigSource?: boolean
   uiCssContent?: string
 }
@@ -33,6 +35,10 @@ function escapeRegex(value: string) {
 
 function toRegexPath(value: string) {
   return escapeRegex(value.replace(/\\/g, '/')).replaceAll('/', '[\\\\/]')
+}
+
+function toGlobPath(value: string) {
+  return value.replace(/\\/g, '/')
 }
 
 function parseUiSources(css: string): ParsedUiSources {
@@ -80,8 +86,9 @@ function getUiSourceSelection(
   buildDir: string,
   componentDetection = false,
   uiCssContent?: string,
+  dev = false,
 ): ParsedUiSources {
-  if (!componentDetection) {
+  if (!componentDetection || dev) {
     return { allowAll: true, directories: [], files: [] }
   }
 
@@ -102,10 +109,11 @@ function createNuxtBuildIncludeRegexes(
   buildDir: string,
   componentDetection = false,
   uiCssContent?: string,
+  dev = false,
 ) {
   const normalizedBuildDir = resolve(buildDir).replace(/\\/g, '/').replace(/\/+$/, '')
   const buildDirPattern = toRegexPath(normalizedBuildDir)
-  const selection = getUiSourceSelection(buildDir, componentDetection, uiCssContent)
+  const selection = getUiSourceSelection(buildDir, componentDetection, uiCssContent, dev)
   const include: RegExp[] = []
 
   include.push(new RegExp(`${buildDirPattern}[\\\\/]app\\.config\\.(?:[cm]?js|[cm]?ts)($|\\?)`))
@@ -128,14 +136,46 @@ function createNuxtBuildIncludeRegexes(
   return include
 }
 
-export function getSharedNuxtUiPipelineInclude(context: Pick<NuxtUiPipelineContext, 'includeAppConfigSource'> = {}): FilterPattern[] {
+function createNuxtBuildFilesystemEntries(
+  buildDir: string,
+  componentDetection = false,
+  uiCssContent?: string,
+  appConfigFiles: string[] = [],
+  dev = false,
+) {
+  const normalizedBuildDir = resolve(buildDir)
+  const selection = getUiSourceSelection(buildDir, componentDetection, uiCssContent, dev)
+  const entries = Array.from(new Set([
+    toGlobPath(resolve(normalizedBuildDir, 'app.config.{js,mjs,cjs,ts,mts,cts}')),
+    ...appConfigFiles.map(file => toGlobPath(resolve(file))),
+  ]))
+
+  if (selection.allowAll) {
+    entries.push(toGlobPath(resolve(normalizedBuildDir, 'ui/**/*.ts')))
+    return entries
+  }
+
+  for (const directory of selection.directories) {
+    entries.push(toGlobPath(resolve(normalizedBuildDir, 'ui', directory, '**/*.ts')))
+  }
+
+  for (const file of selection.files) {
+    entries.push(toGlobPath(resolve(normalizedBuildDir, 'ui', file)))
+  }
+
+  return entries
+}
+
+export function getSharedNuxtUiPipelineInclude(
+  context: Pick<NuxtUiPipelineContext, 'appConfigFiles' | 'includeAppConfigSource'> = {},
+): FilterPattern[] {
   const include: FilterPattern[] = [
     virtualNuxtUiTemplatesInclude,
     nuxtBuildUiAliasInclude,
     nuxtBuildAppConfigAliasInclude,
   ]
 
-  if (context.includeAppConfigSource) {
+  if (context.includeAppConfigSource || Boolean(context.appConfigFiles?.length)) {
     include.push(appConfigSourceInclude)
   }
 
@@ -148,6 +188,7 @@ export function getRequiredNuxtUiPipelineInclude(context: NuxtUiPipelineContext 
         context.buildDir,
         Boolean(context.componentDetection),
         context.uiCssContent,
+        Boolean(context.dev),
       )
     : [fallbackNuxtUiBuildInclude]
 
@@ -157,79 +198,16 @@ export function getRequiredNuxtUiPipelineInclude(context: NuxtUiPipelineContext 
   ]
 }
 
-export function getNuxtUiBuildIncludeRuntimeTemplateSource(buildDir: string) {
-  const normalizedBuildDir = resolve(buildDir).replace(/\\/g, '/').replace(/\/+$/, '')
-  const uiCssPath = resolve(buildDir, 'ui.css')
+export function getRequiredNuxtUiFilesystemContent(context: NuxtUiPipelineContext = {}) {
+  if (!context.buildDir) {
+    return []
+  }
 
-  return [
-    `const __nuxtUiBuildIncludes = (() => {`,
-    `  const buildDir = ${JSON.stringify(normalizedBuildDir)};`,
-    `  const uiCssPath = ${JSON.stringify(uiCssPath)};`,
-    `  const sourcePattern = /@source\\s+"\\.\\/ui(?:\\/([^"]+))?";/g;`,
-    ``,
-    `  const escapeRegex = value => value.replace(/[.*+?^$(){}|[\\]\\\\]/g, '\\\\$&');`,
-    `  const toRegexPath = value => escapeRegex(value.replace(/\\\\/g, '/')).replaceAll('/', '[\\\\\\\\/]');`,
-    `  const buildDirPattern = toRegexPath(buildDir);`,
-    ``,
-    `  const includes = [`,
-    `    new RegExp(\`\${buildDirPattern}[\\\\\\\\/]app\\\\.config\\\\.(?:[cm]?js|[cm]?ts)($|\\\\?)\`),`,
-    `  ];`,
-    ``,
-    `  try {`,
-    `    const css = readFileSync(uiCssPath, 'utf8');`,
-    `    let allowAll = false;`,
-    `    let hasSource = false;`,
-    `    const directories = [];`,
-    `    const files = [];`,
-    ``,
-    `    sourcePattern.lastIndex = 0;`,
-    `    while (true) {`,
-    `      const match = sourcePattern.exec(css);`,
-    `      if (!match) {`,
-    `        break;`,
-    `      }`,
-    ``,
-    `      hasSource = true;`,
-    `      const rawEntry = match[1];`,
-    `      if (!rawEntry) {`,
-    `        allowAll = true;`,
-    `        continue;`,
-    `      }`,
-    ``,
-    `      const entry = rawEntry.replace(/\\\\/g, '/').replace(/^\\.\\//, '');`,
-    `      if (!entry) {`,
-    `        allowAll = true;`,
-    `        continue;`,
-    `      }`,
-    ``,
-    `      if (entry.endsWith('.ts')) {`,
-    `        files.push(entry);`,
-    `      }`,
-    `      else {`,
-    `        directories.push(entry.endsWith('/') ? entry : \`\${entry}/\`);`,
-    `      }`,
-    `    }`,
-    ``,
-    `    if (!hasSource || allowAll) {`,
-    `      includes.push(new RegExp(\`\${buildDirPattern}[\\\\\\\\/]ui[\\\\\\\\/].+\\\\.ts($|\\\\?)\`));`,
-    `    }`,
-    `    else {`,
-    `      for (const directory of directories) {`,
-    `        const directoryPattern = toRegexPath(\`ui/\${directory}\`);`,
-    `        includes.push(new RegExp(\`\${buildDirPattern}[\\\\\\\\/]\${directoryPattern}.+\\\\.ts($|\\\\?)\`));`,
-    `      }`,
-    ``,
-    `      for (const file of files) {`,
-    `        const filePattern = toRegexPath(\`ui/\${file}\`);`,
-    `        includes.push(new RegExp(\`\${buildDirPattern}[\\\\\\\\/]\${filePattern}($|\\\\?)\`));`,
-    `      }`,
-    `    }`,
-    `  }`,
-    `  catch {`,
-    `    includes.push(new RegExp(\`\${buildDirPattern}[\\\\\\\\/]ui[\\\\\\\\/].+\\\\.ts($|\\\\?)\`));`,
-    `  }`,
-    ``,
-    `  return includes;`,
-    `})()`,
-  ].join('\n')
+  return createNuxtBuildFilesystemEntries(
+    context.buildDir,
+    Boolean(context.componentDetection),
+    context.uiCssContent,
+    context.appConfigFiles,
+    Boolean(context.dev),
+  )
 }

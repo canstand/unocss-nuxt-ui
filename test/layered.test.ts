@@ -4,9 +4,9 @@ import { fileURLToPath } from 'node:url'
 import { buildNuxt, loadNuxt } from '@nuxt/kit'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('build integration', () => {
-  const rootDir = fileURLToPath(new URL('./fixtures/basic', import.meta.url))
-  const buildDir = join(rootDir, '.nuxt', 'integration-basic')
+describe('layered app config integration', () => {
+  const rootDir = fileURLToPath(new URL('./fixtures/layered', import.meta.url))
+  const buildDir = join(rootDir, '.nuxt', 'integration-layered')
   const outputDir = join(buildDir, 'output')
   let uiCss = ''
   let clientCss = ''
@@ -49,13 +49,14 @@ describe('build integration', () => {
     await rm(buildDir, { recursive: true, force: true })
   })
 
-  it('limits ui theme scanning to detected components during build', () => {
+  it('limits build scanning to the used ui component theme files', () => {
     expect(uiCss).toContain('@source "./ui/button.ts";')
+    expect(uiCss).toContain('@source "./ui/link.ts";')
     expect(uiCss).not.toContain('@source "./ui";')
   })
 
-  it('emits ui styles and app.config theme overrides', () => {
-    expect(clientCss).toContain('.text-success{color:color-mix(in srgb,var(--ui-success)')
+  it('extracts theme overrides from root and extended layer app.config files', () => {
     expect(clientCss).toContain('.tracking-\\[0\\.3em\\]{--un-tracking:.3em;letter-spacing:.3em}')
+    expect(clientCss).toContain('.tracking-\\[0\\.4em\\]{--un-tracking:.4em;letter-spacing:.4em}')
   })
 })

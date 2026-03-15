@@ -1,5 +1,3 @@
-import type { PluginOption } from 'vite'
-
 const styleLikeRequestPattern = /\.(?:vue|css|postcss|scss|sass|less|styl|stylus|md|mdc)(?:$|\?)/
 
 export function isStyleLikeRequest(id: string) {
@@ -39,14 +37,14 @@ function isTailwindVitePlugin(item: unknown): item is { name: string } {
     && item.name.startsWith('@tailwindcss/vite')
 }
 
-export function stripTailwindVitePlugins(plugins: PluginOption[] = []) {
-  const next: PluginOption[] = []
+export function stripTailwindVitePlugins<T>(plugins: T[] = []) {
+  const next: T[] = []
 
   for (const item of plugins) {
     if (Array.isArray(item)) {
       const filtered = item.filter(entry => !isTailwindVitePlugin(entry))
       if (filtered.length > 0) {
-        next.push(filtered)
+        next.push(filtered as T)
       }
       continue
     }
