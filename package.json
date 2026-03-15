@@ -9,6 +9,10 @@
     ".": {
       "types": "./dist/types.d.mts",
       "import": "./dist/module.mjs"
+    },
+    "./preset": {
+      "types": "./dist/preset.d.ts",
+      "import": "./dist/preset.mjs"
     }
   },
   "main": "./dist/module.mjs",
@@ -36,22 +40,35 @@
     "test:watch": "vitest watch",
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
+  "peerDependencies": {
+    "@nuxt/ui": ">=4.0.0",
+    "@unocss/nuxt": ">=0.60.0",
+    "nuxt": ">=3.10.0",
+    "unocss": ">=0.60.0"
+  },
   "dependencies": {
-    "@nuxt/kit": "catalog:"
+    "@nuxt/kit": "catalog:",
+    "@unocss/core": "catalog:",
+    "@unocss/preset-wind4": "catalog:",
+    "defu": "catalog:"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
+    "@iconify-json/lucide": "catalog:",
     "@nuxt/devtools": "catalog:",
     "@nuxt/eslint-config": "catalog:",
     "@nuxt/module-builder": "catalog:",
     "@nuxt/schema": "catalog:",
     "@nuxt/test-utils": "catalog:",
+    "@nuxt/ui": "catalog:",
     "@types/node": "catalog:",
+    "@unhead/vue": "catalog:",
     "@unocss/eslint-plugin": "catalog:",
     "changelogen": "catalog:",
     "eslint": "catalog:",
     "nuxt": "catalog:",
     "typescript": "catalog:",
+    "unocss": "catalog:",
     "vitest": "catalog:",
     "vue-tsc": "catalog:"
   }

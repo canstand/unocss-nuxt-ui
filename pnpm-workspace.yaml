@@ -1,20 +1,31 @@
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
 packages:
   - playground
 
 catalog:
   '@antfu/eslint-config': ^7.7.2
+  '@iconify-json/lucide': ^1.2.98
   '@nuxt/devtools': ^3.2.3
-  '@nuxt/eslint': ^1.15.2
   '@nuxt/eslint-config': ^1.15.2
   '@nuxt/kit': ^4.4.2
   '@nuxt/module-builder': ^1.0.2
   '@nuxt/schema': ^4.4.2
   '@nuxt/test-utils': ^4.0.0
+  '@nuxt/ui': ^4.5.1
   '@types/node': latest
+  '@unhead/vue': ^2.1.12
+  '@unocss/core': ^66.6.6
   '@unocss/eslint-plugin': ^66.6.6
+  '@unocss/nuxt': ^66.6.6
+  '@unocss/preset-wind4': ^66.6.6
   changelogen: ^0.6.2
+  defu: ^6.1.4
   eslint: ^10.0.3
   nuxt: ^4.4.2
   typescript: ~5.9.3
+  unocss: ^66.6.6
   vitest: ^4.0.18
   vue-tsc: ^3.2.5

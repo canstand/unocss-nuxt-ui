@@ -1,0 +1,186 @@
+import defu from 'defu'
+
+export type ColorValue = string | Record<string, string>
+
+export interface PresetThemeOptions {
+  colors?: ColorValue
+  textColors?: Record<string, string>
+  backgroundColors?: Record<string, string>
+  borderColors?: Record<string, string>
+  ringColors?: Record<string, string>
+  ringOffsetColors?: Record<string, string>
+  divideColors?: Record<string, string>
+  outlineColors?: Record<string, string>
+  strokeColors?: Record<string, string>
+  fillColors?: Record<string, string>
+}
+
+export function resolveTheme(options: { theme?: PresetThemeOptions } = {}) {
+  return defu(options?.theme, {
+    colors: {
+      primary: {
+        DEFAULT: 'var(--ui-primary)',
+        50: 'var(--ui-color-primary-50)',
+        100: 'var(--ui-color-primary-100)',
+        200: 'var(--ui-color-primary-200)',
+        300: 'var(--ui-color-primary-300)',
+        400: 'var(--ui-color-primary-400)',
+        500: 'var(--ui-color-primary-500)',
+        600: 'var(--ui-color-primary-600)',
+        700: 'var(--ui-color-primary-700)',
+        800: 'var(--ui-color-primary-800)',
+        900: 'var(--ui-color-primary-900)',
+        950: 'var(--ui-color-primary-950)',
+      },
+      secondary: {
+        DEFAULT: 'var(--ui-secondary)',
+        50: 'var(--ui-color-secondary-50)',
+        100: 'var(--ui-color-secondary-100)',
+        200: 'var(--ui-color-secondary-200)',
+        300: 'var(--ui-color-secondary-300)',
+        400: 'var(--ui-color-secondary-400)',
+        500: 'var(--ui-color-secondary-500)',
+        600: 'var(--ui-color-secondary-600)',
+        700: 'var(--ui-color-secondary-700)',
+        800: 'var(--ui-color-secondary-800)',
+        900: 'var(--ui-color-secondary-900)',
+        950: 'var(--ui-color-secondary-950)',
+      },
+      success: {
+        DEFAULT: 'var(--ui-success)',
+        50: 'var(--ui-color-success-50)',
+        100: 'var(--ui-color-success-100)',
+        200: 'var(--ui-color-success-200)',
+        300: 'var(--ui-color-success-300)',
+        400: 'var(--ui-color-success-400)',
+        500: 'var(--ui-color-success-500)',
+        600: 'var(--ui-color-success-600)',
+        700: 'var(--ui-color-success-700)',
+        800: 'var(--ui-color-success-800)',
+        900: 'var(--ui-color-success-900)',
+        950: 'var(--ui-color-success-950)',
+      },
+      info: {
+        DEFAULT: 'var(--ui-info)',
+        50: 'var(--ui-color-info-50)',
+        100: 'var(--ui-color-info-100)',
+        200: 'var(--ui-color-info-200)',
+        300: 'var(--ui-color-info-300)',
+        400: 'var(--ui-color-info-400)',
+        500: 'var(--ui-color-info-500)',
+        600: 'var(--ui-color-info-600)',
+        700: 'var(--ui-color-info-700)',
+        800: 'var(--ui-color-info-800)',
+        900: 'var(--ui-color-info-900)',
+        950: 'var(--ui-color-info-950)',
+      },
+      warning: {
+        DEFAULT: 'var(--ui-warning)',
+        50: 'var(--ui-color-warning-50)',
+        100: 'var(--ui-color-warning-100)',
+        200: 'var(--ui-color-warning-200)',
+        300: 'var(--ui-color-warning-300)',
+        400: 'var(--ui-color-warning-400)',
+        500: 'var(--ui-color-warning-500)',
+        600: 'var(--ui-color-warning-600)',
+        700: 'var(--ui-color-warning-700)',
+        800: 'var(--ui-color-warning-800)',
+        900: 'var(--ui-color-warning-900)',
+        950: 'var(--ui-color-warning-950)',
+      },
+      error: {
+        DEFAULT: 'var(--ui-error)',
+        50: 'var(--ui-color-error-50)',
+        100: 'var(--ui-color-error-100)',
+        200: 'var(--ui-color-error-200)',
+        300: 'var(--ui-color-error-300)',
+        400: 'var(--ui-color-error-400)',
+        500: 'var(--ui-color-error-500)',
+        600: 'var(--ui-color-error-600)',
+        700: 'var(--ui-color-error-700)',
+        800: 'var(--ui-color-error-800)',
+        900: 'var(--ui-color-error-900)',
+        950: 'var(--ui-color-error-950)',
+      },
+      neutral: {
+        DEFAULT: 'var(--ui-neutral)',
+        50: 'var(--ui-color-neutral-50)',
+        100: 'var(--ui-color-neutral-100)',
+        200: 'var(--ui-color-neutral-200)',
+        300: 'var(--ui-color-neutral-300)',
+        400: 'var(--ui-color-neutral-400)',
+        500: 'var(--ui-color-neutral-500)',
+        600: 'var(--ui-color-neutral-600)',
+        700: 'var(--ui-color-neutral-700)',
+        800: 'var(--ui-color-neutral-800)',
+        900: 'var(--ui-color-neutral-900)',
+        950: 'var(--ui-color-neutral-950)',
+      },
+    },
+    textColors: {
+      dimmed: 'var(--ui-text-dimmed)',
+      muted: 'var(--ui-text-muted)',
+      toned: 'var(--ui-text-toned)',
+      default: 'var(--ui-text)',
+      highlighted: 'var(--ui-text-highlighted)',
+      inverted: 'var(--ui-text-inverted)',
+    },
+    backgroundColors: {
+      default: 'var(--ui-bg)',
+      border: 'var(--ui-border)',
+      muted: 'var(--ui-bg-muted)',
+      elevated: 'var(--ui-bg-elevated)',
+      accented: 'var(--ui-bg-accented)',
+      inverted: 'var(--ui-bg-inverted)',
+    },
+    borderColors: {
+      default: 'var(--ui-border)',
+      muted: 'var(--ui-border-muted)',
+      accented: 'var(--ui-border-accented)',
+      inverted: 'var(--ui-border-inverted)',
+      bg: 'var(--ui-bg)',
+    },
+    ringColors: {
+      default: 'var(--ui-border)',
+      muted: 'var(--ui-border-muted)',
+      accented: 'var(--ui-border-accented)',
+      inverted: 'var(--ui-border-inverted)',
+      bg: 'var(--ui-bg)',
+    },
+    ringOffsetColors: {
+      default: 'var(--ui-border)',
+      muted: 'var(--ui-border-muted)',
+      accented: 'var(--ui-border-accented)',
+      inverted: 'var(--ui-border-inverted)',
+      bg: 'var(--ui-bg)',
+    },
+    divideColors: {
+      default: 'var(--ui-border)',
+      muted: 'var(--ui-border-muted)',
+      accented: 'var(--ui-border-accented)',
+      inverted: 'var(--ui-border-inverted)',
+      bg: 'var(--ui-bg)',
+    },
+    outlineColors: {
+      default: 'var(--ui-border)',
+      inverted: 'var(--ui-border-inverted)',
+    },
+    strokeColors: {
+      default: 'var(--ui-border)',
+      inverted: 'var(--ui-border-inverted)',
+    },
+    fillColors: {
+      default: 'var(--ui-border)',
+      inverted: 'var(--ui-border-inverted)',
+    },
+    radius: {
+      'xs': 'calc(var(--ui-radius) * 0.5)',
+      'sm': 'var(--ui-radius)',
+      'md': 'calc(var(--ui-radius) * 1.5)',
+      'lg': 'calc(var(--ui-radius) * 2)',
+      'xl': 'calc(var(--ui-radius) * 3)',
+      '2xl': 'calc(var(--ui-radius) * 4)',
+      '3xl': 'calc(var(--ui-radius) * 6)',
+    },
+  })
+}

@@ -1,6 +1,14 @@
 export default defineNuxtConfig({
-  modules: ['unocss-nuxt-ui'],
+  modules: ['@nuxt/ui', 'unocss-nuxt-ui'],
   devtools: { enabled: true },
+  css: ['~/assets/styles/main.css'],
   compatibilityDate: 'latest',
-  uiUno: {},
+  icon: {
+    clientBundle: {
+      icons: [
+        'lucide:sun',
+        'lucide:moon',
+      ],
+    },
+  },
 })

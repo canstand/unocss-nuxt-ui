@@ -10,5 +10,11 @@
   "dependencies": {
     "nuxt": "catalog:",
     "unocss-nuxt-ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "catalog:",
+    "@nuxt/ui": "catalog:",
+    "@unocss/nuxt": "catalog:",
+    "unocss": "catalog:"
   }
 }

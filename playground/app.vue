@@ -2,7 +2,9 @@
 </script>
 
 <template>
-  <div>
-    Nuxt module playground!
-  </div>
+  <UApp>
+    <Html lang="en" class="dark">
+      <NuxtPage />
+    </Html>
+  </UApp>
 </template>

@@ -1,0 +1,192 @@
+<script setup lang="ts">
+useHead({
+  title: 'unocss-nuxt-ui',
+  meta: [
+    { name: 'description', content: 'Use your favorite CSS engine UnoCSS with your favorite UI library Nuxt UI' },
+  ],
+})
+
+const isDark = ref(true)
+const buttonVariants = ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'] as const
+const selectVariants = ['outline', 'soft', 'subtle', 'ghost', 'none'] as const
+const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral'] as const
+const fruits = ['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple']
+const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek']
+const items = [
+  [{ label: 'Fruits', type: 'label' as const }, ...fruits],
+  [{ label: 'Vegetables', type: 'label' as const }, ...vegetables],
+]
+
+onMounted(() => {
+  isDark.value = document.documentElement.classList.contains('dark')
+})
+
+function upperFirst(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+function handleToggleDarkMode() {
+  isDark.value = !isDark.value
+
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+  }
+  else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+</script>
+
+<template>
+  <div>
+    <UHeader title="Playground" />
+    <UMain>
+      <UContainer>
+        <div class="flex flex-col items-center">
+          <div class="text-center flex flex-col">
+            <h1 class="text-6xl font-bold mt-6xl">
+              unocss-nuxt-ui
+            </h1>
+            <p class="text-dimmed">
+              Use your favorite CSS engine
+              <a
+                class="text-primary underline decoration-dashed"
+                href="https://unocss.dev"
+                target="_blank"
+                rel="noopener"
+                aria-label="UnoCSS website"
+              >UnoCSS</a>
+              with your favorite UI library
+              <a
+                class="text-primary underline decoration-dashed"
+                href="https://ui.nuxt.com"
+                target="_blank"
+                rel="noopener"
+                aria-label="Nuxt UI website"
+              >Nuxt UI</a>
+            </p>
+          </div>
+          <!-- <img src="/logo.svg" class="size-20"> -->
+
+          <div class="mt-6xl flex gap-lg items-center justify-center">
+            <UButton
+              variant="soft"
+              color="neutral"
+              aria-label="Toggle dark mode"
+              :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
+              @click="handleToggleDarkMode"
+            />
+            <!-- <USwitch
+        checked-icon="i-lucide-sun"
+        unchecked-icon="i-lucide-moon"
+        :model-value="!isDark"
+        @update:model-value="handleToggleDarkMode"
+      /> -->
+            <UButton
+              variant="soft"
+              color="neutral"
+              icon="i-lucide-github"
+              as="a"
+              href="https://github.com/canstand/unocss-nuxt-ui"
+              target="_blank"
+              rel="noopener"
+              aria-label="unocss-nuxt-ui on GitHub"
+            />
+          </div>
+
+          <div class="mt-6xl flex flex-wrap gap-lg items-center justify-center">
+            <UButton v-for="color in colors" :key="color" :color="color">
+              {{ upperFirst(color) }}
+            </UButton>
+          </div>
+
+          <div class="mt-lg flex flex-wrap gap-lg items-center justify-center">
+            <UButton
+              v-for="variant in buttonVariants"
+              :key="variant"
+              :variant
+              color="primary"
+            >
+              {{ upperFirst(variant) }}
+            </UButton>
+            <UButton disabled>
+              Disabled
+            </UButton>
+          </div>
+
+          <div class="mt-6xl flex flex-wrap gap-lg max-w-200 items-center justify-center">
+            <USelect
+              v-for="variant in selectVariants"
+              :key="variant"
+              :items="items"
+              :placeholder="upperFirst(variant)"
+              :variant="variant"
+              class="w-48"
+              aria-label="Select a fruit or a vegetable"
+            />
+          </div>
+
+          <div>
+            <UCollapsible class="flex flex-col gap-2 w-48">
+              <UButton
+                label="Open"
+                color="neutral"
+                variant="subtle"
+                trailing-icon="i-lucide-chevron-down"
+                block
+              />
+
+              <template #content>
+                <USkeleton class="h-48" />
+              </template>
+            </UCollapsible>
+          </div>
+
+          <div class="mt-6xl">
+            <UButton
+              trailing-icon="i-lucide-external-link"
+              to="https://nuxt-ui-unocss-playground.netlify.app"
+              color="primary"
+              variant="link"
+              size="xs"
+              rel="noopener noreferrer"
+              class="underline decoration-dashed"
+            >
+              View Full Playground
+            </UButton>
+          </div>
+
+          <!-- <UFieldGroup>
+      <UInput color="neutral" variant="outline" placeholder="Enter token" />
+
+      <UButton color="neutral" variant="subtle" icon="i-lucide-clipboard" />
+    </UFieldGroup> -->
+
+          <div
+            :class="[
+              'translate-x-(--xxx)',
+              'translate-y-(--xxx)',
+              'transform-(--xxx)',
+              'top-(--xxx)',
+              'left-(--xxx)',
+              'right-(--xxx)',
+              'bottom-(--xxx)',
+              'w-(--xxx)',
+              'h-(--xxx)',
+              'z-(--xxx)',
+              'min-w-(--xxx)',
+              'min-h-(--xxx)',
+              'max-w-(--xxx)',
+              'max-h-(--xxx)',
+              'origin-(--xxx)',
+              'gap-(--xxx)',
+              '[--gap:--spacing(16)]',
+              '-space-x-px',
+              '-space-y-px',
+            ].join(' ')"
+          />
+        </div>
+      </UContainer>
+    </UMain>
+  </div>
+</template>
