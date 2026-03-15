@@ -1,0 +1,14 @@
+{
+  "name": "unocss-nuxt-ui-playground",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "nuxt": "catalog:",
+    "unocss-nuxt-ui": "workspace:*"
+  }
+}
