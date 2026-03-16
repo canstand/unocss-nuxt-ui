@@ -1,27 +1,27 @@
 import { describe, expect, it } from 'vitest'
-import { rewriteTailwindVarSyntaxInApply } from '../../src/vite/transform'
+import { normalizeTailwindVarSyntaxTokens } from '../../src/vite/transform'
 
-describe('rewriteTailwindVarSyntaxInApply', () => {
-  it('should rewrite tailwind variable syntax in @apply', () => {
+describe('normalizeTailwindVarSyntaxTokens', () => {
+  it('should rewrite tailwind variable syntax', () => {
     const input = `
 .btn {
   @apply bg-(--primary) text-(--white) hover:bg-(--secondary)/80;
 }
 `
-    const output = rewriteTailwindVarSyntaxInApply(input)
+    const output = normalizeTailwindVarSyntaxTokens(input)
     expect(output).toContain('bg-[var(--primary)]')
     expect(output).toContain('text-[var(--white)]')
     expect(output).toContain('hover:bg-[var(--secondary)]/80')
   })
 
-  it('should handle multiple @apply in one code block', () => {
+  it('should handle multiple occurrences in one code block', () => {
     const input = `
 .btn {
   @apply bg-(--primary);
   @apply text-(--white);
 }
 `
-    const output = rewriteTailwindVarSyntaxInApply(input)
+    const output = normalizeTailwindVarSyntaxTokens(input)
     expect(output).toContain('bg-[var(--primary)]')
     expect(output).toContain('text-[var(--white)]')
   })
@@ -32,7 +32,7 @@ describe('rewriteTailwindVarSyntaxInApply', () => {
   @apply bg-blue-500;
 }
 `
-    const output = rewriteTailwindVarSyntaxInApply(input)
+    const output = normalizeTailwindVarSyntaxTokens(input)
     expect(output).toBe(input)
   })
 
@@ -42,7 +42,13 @@ describe('rewriteTailwindVarSyntaxInApply', () => {
   @apply !bg-(--primary);
 }
 `
-    const output = rewriteTailwindVarSyntaxInApply(input)
+    const output = normalizeTailwindVarSyntaxTokens(input)
     expect(output).toContain('!bg-[var(--primary)]')
+  })
+
+  it('should handle variants and multiple tokens', () => {
+    const input = '<div class="dark:bg-(--dark-bg) hover:text-(--hover-text)/50 !focus:ring-(--ring)"></div>'
+    const output = normalizeTailwindVarSyntaxTokens(input)
+    expect(output).toBe('<div class="dark:bg-[var(--dark-bg)] hover:text-[var(--hover-text)]/50 !focus:ring-[var(--ring)]"></div>')
   })
 })
