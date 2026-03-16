@@ -81,6 +81,7 @@
     "@unocss/eslint-plugin": "catalog:",
     "changelogen": "catalog:",
     "eslint": "catalog:",
+    "eslint-plugin-format": "catalog:",
     "nuxt": "catalog:",
     "typescript": "catalog:",
     "unocss": "catalog:",
