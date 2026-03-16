@@ -11,4 +11,7 @@ export default defineNuxtConfig({
       componentDetection: true,
     },
   },
+  unocss: {
+    configFile: false, // test required, prevent load uno.config.ts in repo root
+  },
 })
