@@ -14,6 +14,8 @@ import { applyNuxtUiUnoDefaults } from './unocss/logic/defaults'
 import { getNuxtUiUnoConfigTemplate, resolveUnoLayerConfigPaths } from './unocss/logic/template'
 import { isStyleLikeRequest, normalizeTailwindVarSyntaxTokens, stripTailwindVitePlugins } from './vite/transform'
 
+export * from './preset'
+
 export interface ModuleOptions {
   tailwindColorsAlias?: boolean
 }
