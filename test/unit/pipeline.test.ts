@@ -37,17 +37,17 @@ describe('nuxt UI pipeline include selection', () => {
 
 describe('generated uno config template', () => {
   const buildDir = '/tmp/project/.nuxt'
-  const presetImportPath = '/tmp/project/preset.mjs'
   const appConfigFile = '/tmp/project/app.config.ts'
 
   it('keeps dev config on full ui scanning', () => {
-    const template = getNuxtUiUnoConfigTemplate([], presetImportPath, {
+    const template = getNuxtUiUnoConfigTemplate([], {
       appConfigFiles: [appConfigFile],
       buildDir,
       componentDetection: true,
       dev: true,
     })
 
+    expect(template).toContain(`import { presetNuxtUI, presetNuxtUIExtra } from 'unocss-nuxt-ui'`)
     expect(template).toContain('/#build\\/ui\\/.+($|\\?)/')
     expect(template).toContain('ui[\\\\/].+\\.ts')
     expect(template).toContain(`${buildDir}/ui/**/*.ts`)
@@ -56,7 +56,7 @@ describe('generated uno config template', () => {
   })
 
   it('adds filesystem entries for build-time tree shaking', () => {
-    const template = getNuxtUiUnoConfigTemplate([], presetImportPath, {
+    const template = getNuxtUiUnoConfigTemplate([], {
       appConfigFiles: [appConfigFile],
       buildDir,
       componentDetection: true,

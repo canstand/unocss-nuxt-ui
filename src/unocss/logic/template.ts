@@ -37,7 +37,6 @@ export async function resolveUnoLayerConfigPaths(nuxt: NuxtLike, configFile?: st
 
 export function getNuxtUiUnoConfigTemplate(
   layerConfigPaths: string[] = [],
-  presetImportPath: string,
   options: NuxtUiUnoConfigTemplateOptions = {},
 ) {
   const pipelineIncludes = getRequiredNuxtUiPipelineInclude(options)
@@ -51,7 +50,7 @@ export function getNuxtUiUnoConfigTemplate(
   const imports = [
     `import presetWind4 from '@unocss/preset-wind4'`,
     `import { defineConfig, mergeConfigs, transformerDirectives, transformerVariantGroup } from 'unocss'`,
-    `import { presetNuxtUI, presetNuxtUIExtra } from ${JSON.stringify(presetImportPath)}`,
+    `import { presetNuxtUI, presetNuxtUIExtra } from 'unocss-nuxt-ui'`,
     ...layerConfigPaths.map((path, index) => `import layerConfig${index} from ${JSON.stringify(path)}`),
   ]
 

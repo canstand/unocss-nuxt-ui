@@ -91,7 +91,6 @@ export default defineNuxtModule<ModuleOptions>({
   },
   async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
-    const resolvedPresetPath = await findPath(resolve('./preset')) || resolve('./preset')
     const tailwindColorsCompatPath = resolve('./runtime/tailwindcss/colors')
 
     if (options.tailwindColorsAlias) {
@@ -123,7 +122,6 @@ export default defineNuxtModule<ModuleOptions>({
 
         return getNuxtUiUnoConfigTemplate(
           layerConfigPaths.reverse(),
-          resolvedPresetPath,
           {
             buildDir: nuxt.options.buildDir,
             appConfigFiles,
