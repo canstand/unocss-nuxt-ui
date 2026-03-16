@@ -23,7 +23,7 @@ This project is inspired by [lehuuphuc/unocss-preset-nuxt-ui](https://github.com
   - `transformerDirectives()`
   - `transformerVariantGroup({ separators: [':'] })`
 - Removes the Tailwind Vite plugin that `@nuxt/ui` would otherwise inject
-- Rewrites Tailwind-style `@apply ...-(--token)` syntax into UnoCSS-compatible `var(...)` utilities
+- Rewrites Tailwind-style `bg-(--ui-bg-accented)/50` syntax into UnoCSS-compatible `bg-[var(--ui-bg-accented)]/50` utilities
 - Injects the compatibility CSS and `@nuxt/ui` runtime keyframes needed by the UI package
 - Injects runtime color variables derived from `app.config.ts`
 - Scans generated `.nuxt/ui/*.ts` theme files and source `app.config.*` files from all Nuxt layers
@@ -44,7 +44,7 @@ npx nuxt module add unocss-nuxt-ui
 Or install manually:
 
 ```bash
-pnpm add unocss-nuxt-ui
+pnpm add unocss-nuxt-ui unocss @unocss/nuxt
 ```
 
 Then enable the module:
@@ -56,18 +56,28 @@ export default defineNuxtConfig({
 })
 ```
 
-If you want to keep `@nuxt/ui`'s original `tailwindcss/colors` import instead of aliasing it to the UnoCSS-compatible shim:
+`@nuxt/ui` and `@unocss/nuxt` are declared as module dependencies, so you do not need to list them manually unless you want to be explicit.
 
-```ts
-export default defineNuxtConfig({
-  'modules': ['unocss-nuxt-ui'],
-  'unocss-nuxt-ui': {
-    tailwindColorsAlias: false,
-  },
-})
+Change `assets/styles/main.css` from
+
+```css
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme static {
+  --font-sans: 'Public Sans', sans-serif;
+}
 ```
 
-`@nuxt/ui` and `@unocss/nuxt` are declared as module dependencies, so you do not need to list them manually unless you want to be explicit.
+to
+
+```css
+:root {
+  --font-sans: 'Public Sans', sans-serif;
+}
+```
+
+That's it.
 
 ## Recommended Nuxt UI Config
 
@@ -144,9 +154,9 @@ to be emitted correctly by UnoCSS.
 
 ## Compatibility Notes
 
+- [#5151](https://github.com/unocss/unocss/issues/5151) : `calc(var(--some)+--space(16))` do not work.
 - The module currently exposes no module options. Compatibility behavior is enabled by default.
 - Build-time narrowing is precise for generated Nuxt UI theme files.
-- `app.config.ts` is still scanned at file level. If you keep overrides for unused components in `app.config.ts`, some extra CSS can still be emitted during production builds. That is a tradeoff of Nuxt UI's theme merge model.
 
 ## Exported Presets
 
