@@ -14,7 +14,18 @@ import { applyNuxtUiUnoDefaults } from './unocss/logic/defaults'
 import { getNuxtUiUnoConfigTemplate, resolveUnoLayerConfigPaths } from './unocss/logic/template'
 import { isStyleLikeRequest, rewriteTailwindVarSyntaxInApply, stripTailwindVitePlugins } from './vite/transform'
 
-export interface ModuleOptions {}
+export interface ModuleOptions {
+  tailwindColorsAlias?: boolean
+}
+
+export const defaultModuleOptions: Required<ModuleOptions> = {
+  tailwindColorsAlias: true,
+}
+
+export function addTailwindColorAliases(aliases: Record<string, string>, replacement: string) {
+  aliases['tailwindcss/colors'] = replacement
+  aliases['tailwindcss/colors.js'] = replacement
+}
 
 function isComponentDetectionEnabled(nuxt: { options: Record<string, any> }) {
   const ui = nuxt.options.ui
@@ -63,6 +74,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: 'unocss-nuxt-ui',
     configKey: 'unocss-nuxt-ui',
   },
+  defaults: defaultModuleOptions,
   moduleDependencies: {
     '@unocss/nuxt': {
       defaults: {
@@ -75,9 +87,19 @@ export default defineNuxtModule<ModuleOptions>({
       version: '>=4.0.1',
     },
   },
-  async setup(_options, nuxt) {
+  async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
     const resolvedPresetPath = await findPath(resolve('./preset')) || resolve('./preset')
+    const tailwindColorsCompatPath = resolve('./runtime/tailwindcss/colors')
+
+    if (options.tailwindColorsAlias) {
+      nuxt.options.alias ||= {}
+      addTailwindColorAliases(nuxt.options.alias, tailwindColorsCompatPath)
+
+      nuxt.options.nitro ||= {}
+      nuxt.options.nitro.alias ||= {}
+      addTailwindColorAliases(nuxt.options.nitro.alias, tailwindColorsCompatPath)
+    }
 
     addTemplate({
       filename: 'uno.config.mjs',
@@ -149,6 +171,14 @@ export default defineNuxtModule<ModuleOptions>({
     })
 
     nuxt.hook('vite:extend', async ({ config }) => {
+      if (options.tailwindColorsAlias) {
+        config.resolve ||= {}
+        config.resolve.alias ||= {}
+        if (!Array.isArray(config.resolve.alias)) {
+          addTailwindColorAliases(config.resolve.alias, tailwindColorsCompatPath)
+        }
+      }
+
       config.plugins ||= []
       config.plugins.push({
         name: 'unocss-nuxt-ui:rewrite-apply-var-syntax',

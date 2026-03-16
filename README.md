@@ -56,6 +56,17 @@ export default defineNuxtConfig({
 })
 ```
 
+If you want to keep `@nuxt/ui`'s original `tailwindcss/colors` import instead of aliasing it to the UnoCSS-compatible shim:
+
+```ts
+export default defineNuxtConfig({
+  'modules': ['unocss-nuxt-ui'],
+  'unocss-nuxt-ui': {
+    tailwindColorsAlias: false,
+  },
+})
+```
+
 `@nuxt/ui` and `@unocss/nuxt` are declared as module dependencies, so you do not need to list them manually unless you want to be explicit.
 
 ## Recommended Nuxt UI Config
