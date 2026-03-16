@@ -12,7 +12,7 @@ import {
 import { buildCompatibilityCss, prependCssEntry } from './logic/css'
 import { applyNuxtUiUnoDefaults } from './unocss/logic/defaults'
 import { getNuxtUiUnoConfigTemplate, resolveUnoLayerConfigPaths } from './unocss/logic/template'
-import { isStyleLikeRequest, rewriteTailwindVarSyntaxInApply, stripTailwindVitePlugins } from './vite/transform'
+import { isStyleLikeRequest, normalizeTailwindVarSyntaxTokens, stripTailwindVitePlugins } from './vite/transform'
 
 export interface ModuleOptions {
   tailwindColorsAlias?: boolean
@@ -181,14 +181,14 @@ export default defineNuxtModule<ModuleOptions>({
 
       config.plugins ||= []
       config.plugins.push({
-        name: 'unocss-nuxt-ui:rewrite-apply-var-syntax',
+        name: 'unocss-nuxt-ui:normalize-tailwind-var-syntax',
         enforce: 'pre',
         transform(code, id) {
-          if (!isStyleLikeRequest(id) || !code.includes('@apply') || !code.includes('-(--')) {
+          if (!isStyleLikeRequest(id) || !code.includes('-(--')) {
             return null
           }
 
-          const patched = rewriteTailwindVarSyntaxInApply(code)
+          const patched = normalizeTailwindVarSyntaxTokens(code)
           if (patched === code) {
             return null
           }
