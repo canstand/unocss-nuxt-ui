@@ -145,10 +145,10 @@ function createNuxtBuildFilesystemEntries(
 ) {
   const normalizedBuildDir = resolve(buildDir)
   const selection = getUiSourceSelection(buildDir, componentDetection, uiCssContent, dev)
-  const entries = Array.from(new Set([
+  const entries = [...new Set([
     toGlobPath(resolve(normalizedBuildDir, 'app.config.{js,mjs,cjs,ts,mts,cts}')),
     ...appConfigFiles.map(file => toGlobPath(resolve(file))),
-  ]))
+  ])]
 
   if (selection.allowAll) {
     entries.push(toGlobPath(resolve(normalizedBuildDir, 'ui/**/*.ts')))

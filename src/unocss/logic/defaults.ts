@@ -114,10 +114,10 @@ function ensureFilesystemContent(config: Record<string, any>, context: NuxtUiPip
   config.content ||= {}
 
   const filesystem = toArray<string>(config.content.filesystem as string | string[])
-  config.content.filesystem = Array.from(new Set([
+  config.content.filesystem = [...new Set([
     ...filesystem,
     ...requiredFilesystemContent,
-  ]))
+  ])]
 }
 
 export function applyNuxtUiUnoDefaults(config: Record<string, any>, context: NuxtUiPipelineContext = {}) {

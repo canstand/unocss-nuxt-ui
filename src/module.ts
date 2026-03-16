@@ -55,7 +55,7 @@ async function resolveNuxtAppConfigPaths(nuxt: { options: Record<string, any> })
     return await findPath(join(srcDir, 'app.config'))
   }))
 
-  return Array.from(new Set(paths.filter((path): path is string => typeof path === 'string')))
+  return [...new Set(paths.filter((path): path is string => typeof path === 'string'))]
 }
 
 export default defineNuxtModule<ModuleOptions>({

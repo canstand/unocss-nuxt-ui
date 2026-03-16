@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { getRequiredNuxtUiFilesystemContent, getRequiredNuxtUiPipelineInclude } from '../../src/unocss/logic/pipeline'
 import { getNuxtUiUnoConfigTemplate } from '../../src/unocss/logic/template'
 
-describe('Nuxt UI pipeline include selection', () => {
+describe('nuxt UI pipeline include selection', () => {
   const buildDir = '/tmp/project/.nuxt'
   const detectedUiCss = [
     '@source "./ui/button.ts";',
@@ -73,7 +73,7 @@ describe('generated uno config template', () => {
   })
 })
 
-describe('Nuxt app config extraction', () => {
+describe('nuxt app config extraction', () => {
   it('includes source app config files in filesystem scanning', () => {
     expect(getRequiredNuxtUiFilesystemContent({
       appConfigFiles: ['/tmp/project/app.config.ts'],
