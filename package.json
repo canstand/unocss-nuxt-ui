@@ -82,10 +82,18 @@
     "changelogen": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-format": "catalog:",
+    "lint-staged": "catalog:",
     "nuxt": "catalog:",
+    "simple-git-hooks": "catalog:",
     "typescript": "catalog:",
     "unocss": "catalog:",
     "vitest": "catalog:",
     "vue-tsc": "catalog:"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }
