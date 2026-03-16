@@ -116,7 +116,7 @@ function handleToggleDarkMode() {
           </div>
 
           <div class="mt-6xl flex flex-wrap gap-lg max-w-200 items-center justify-center">
-            <UInput placeholder="app.config.ts customize" />
+            <UInput placeholder="app.config.ts customize order-last" />
             <UCollapsible class="flex flex-col gap-2 w-48">
               <UButton label="Open" color="neutral" variant="subtle" trailing-icon="i-lucide-chevron-down" block />
 
