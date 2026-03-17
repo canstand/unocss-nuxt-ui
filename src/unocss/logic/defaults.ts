@@ -1,19 +1,24 @@
-import type { NuxtUiPipelineContext } from './pipeline'
 import { presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'
-import { presetNuxtUI, presetNuxtUIExtra } from '../../preset'
-import {
-  defaultPipelineInclude,
-  getRequiredNuxtUiFilesystemContent,
-  getRequiredNuxtUiPipelineInclude,
-} from './pipeline'
+import { presetNuxtUI } from '../../preset'
 
 type FilterPattern = RegExp | string | ((id: string) => boolean)
+
+export interface NuxtUiPipelineContext {}
+
+export const defaultPipelineInclude = [/\.(vue|svelte|[jt]sx|vine.ts|mdx?|astro|elm|php|phtml|marko|html)($|\?)/]
+
+export function getRequiredNuxtUiPipelineInclude(): FilterPattern[] {
+  return [
+    /[\\/]\.nuxt[\\/](?:ui[\\/].+\.ts|app\.config\.(?:m?js|m?ts))($|\?)/,
+    /%2F\.nuxt%2F(?:ui%2F.+\.ts|app\.config\.(?:m?js|m?ts))($|\?)/,
+    /[\\/]app\.config\.(?:m?js|m?ts)($|\?)/,
+  ]
+}
 
 const wind4PresetName = '@unocss/preset-wind4'
 const directivesTransformerName = '@unocss/transformer-directives'
 const variantGroupTransformerName = '@unocss/transformer-variant-group'
 const presetNuxtUiName = 'unocss-nuxt-ui'
-const presetNuxtUiExtraName = 'unocss-nuxt-ui-extra'
 
 function ensurePreset(config: Record<string, any>, name: string, factory: () => Record<string, any>, position: 'start' | 'end' = 'end') {
   config.presets ||= []
@@ -83,7 +88,7 @@ function dedupePatterns(patterns: FilterPattern[]) {
   return output
 }
 
-function ensurePipelineInclude(config: Record<string, any>, context: NuxtUiPipelineContext = {}) {
+function ensurePipelineInclude(config: Record<string, any>) {
   config.content ||= {}
 
   if (config.content.pipeline === false) {
@@ -92,7 +97,7 @@ function ensurePipelineInclude(config: Record<string, any>, context: NuxtUiPipel
 
   config.content.pipeline ||= {}
 
-  const requiredNuxtUiPipelineInclude = getRequiredNuxtUiPipelineInclude(context)
+  const requiredNuxtUiPipelineInclude = getRequiredNuxtUiPipelineInclude()
   const hasUserInclude = config.content.pipeline.include !== undefined
   const include = hasUserInclude
     ? toArray<FilterPattern>(config.content.pipeline.include as FilterPattern | FilterPattern[])
@@ -104,22 +109,7 @@ function ensurePipelineInclude(config: Record<string, any>, context: NuxtUiPipel
   ])
 }
 
-function ensureFilesystemContent(config: Record<string, any>, context: NuxtUiPipelineContext = {}) {
-  const requiredFilesystemContent = getRequiredNuxtUiFilesystemContent(context)
-  if (requiredFilesystemContent.length === 0) {
-    return
-  }
-
-  config.content ||= {}
-
-  const filesystem = toArray<string>(config.content.filesystem as string | string[])
-  config.content.filesystem = [...new Set([
-    ...filesystem,
-    ...requiredFilesystemContent,
-  ])]
-}
-
-export function applyNuxtUiUnoDefaults(config: Record<string, any>, context: NuxtUiPipelineContext = {}) {
+export function applyNuxtUiUnoDefaults(config: Record<string, any>, _context: NuxtUiPipelineContext = {}) {
   config.outputToCssLayers ??= true
 
   ensurePreset(config, presetNuxtUiName, () => presetNuxtUI(), 'start')
@@ -127,11 +117,9 @@ export function applyNuxtUiUnoDefaults(config: Record<string, any>, context: Nux
     preflights: { reset: true, theme: 'on-demand' },
     dark: { dark: '.dark', light: '.light' },
   }))
-  ensurePreset(config, presetNuxtUiExtraName, () => presetNuxtUIExtra())
 
   ensureTransformer(config, directivesTransformerName, () => transformerDirectives())
   replaceTransformer(config, variantGroupTransformerName, () => transformerVariantGroup({ separators: [':'] }))
 
-  ensurePipelineInclude(config, context)
-  ensureFilesystemContent(config, context)
+  ensurePipelineInclude(config)
 }

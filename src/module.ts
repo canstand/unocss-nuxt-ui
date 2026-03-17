@@ -1,5 +1,3 @@
-import type { UnoConfigLayerOptions } from './unocss/logic/template'
-import { readFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import {
   addPlugin,
@@ -29,48 +27,6 @@ export function addTailwindColorAliases(aliases: Record<string, string>, replace
   aliases['tailwindcss/colors.js'] = replacement
 }
 
-function isComponentDetectionEnabled(nuxt: { options: Record<string, any> }) {
-  const ui = nuxt.options.ui
-  return Boolean(ui && ui.experimental && ui.experimental.componentDetection)
-}
-
-async function resolveNuxtUiCssContent(nuxt: { options: Record<string, any> }) {
-  const buildTemplates = nuxt.options.build?.templates
-  if (Array.isArray(buildTemplates)) {
-    const uiCssTemplate = buildTemplates.find((template: any) => template?.filename === 'ui.css')
-    if (uiCssTemplate && typeof uiCssTemplate.getContents === 'function') {
-      const content = await uiCssTemplate.getContents({})
-      if (typeof content === 'string' && content.length > 0) {
-        return content
-      }
-    }
-  }
-
-  try {
-    return await readFile(join(nuxt.options.buildDir, 'ui.css'), 'utf8')
-  }
-  catch {
-    return undefined
-  }
-}
-
-async function resolveNuxtAppConfigPaths(nuxt: { options: Record<string, any> }) {
-  const layers = Array.isArray(nuxt.options._layers)
-    ? nuxt.options._layers
-    : []
-
-  const paths = await Promise.all(layers.map(async (layer: any) => {
-    const srcDir = layer?.config?.srcDir || layer?.config?.rootDir
-    if (!srcDir || typeof srcDir !== 'string') {
-      return undefined
-    }
-
-    return await findPath(join(srcDir, 'app.config'))
-  }))
-
-  return [...new Set(paths.filter((path): path is string => typeof path === 'string'))]
-}
-
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'unocss-nuxt-ui',
@@ -95,11 +51,11 @@ export default defineNuxtModule<ModuleOptions>({
 
     if (options.tailwindColorsAlias) {
       nuxt.options.alias ||= {}
-      addTailwindColorAliases(nuxt.options.alias, tailwindColorsCompatPath)
+      addTailwindColorAliases(nuxt.options.alias as Record<string, string>, tailwindColorsCompatPath)
 
       nuxt.options.nitro ||= {}
       nuxt.options.nitro.alias ||= {}
-      addTailwindColorAliases(nuxt.options.nitro.alias, tailwindColorsCompatPath)
+      addTailwindColorAliases(nuxt.options.nitro.alias as Record<string, string>, tailwindColorsCompatPath)
     }
 
     addTemplate({
@@ -108,13 +64,8 @@ export default defineNuxtModule<ModuleOptions>({
       async getContents() {
         const optionsWithUno = nuxt.options as typeof nuxt.options & { unocss?: unknown }
         const userUnoOptions = typeof optionsWithUno.unocss === 'object'
-          ? optionsWithUno.unocss as UnoConfigLayerOptions
+          ? (optionsWithUno.unocss as { nuxtLayers?: boolean, configFile?: string | string[] })
           : undefined
-        const componentDetection = isComponentDetectionEnabled(nuxt as unknown as { options: Record<string, any> })
-        const [uiCssContent, appConfigFiles] = await Promise.all([
-          resolveNuxtUiCssContent(nuxt as unknown as { options: Record<string, any> }),
-          resolveNuxtAppConfigPaths(nuxt as unknown as { options: Record<string, any> }),
-        ])
 
         const layerConfigPaths = userUnoOptions?.nuxtLayers
           ? await resolveUnoLayerConfigPaths(nuxt, userUnoOptions.configFile)
@@ -122,30 +73,13 @@ export default defineNuxtModule<ModuleOptions>({
 
         return getNuxtUiUnoConfigTemplate(
           layerConfigPaths.reverse(),
-          {
-            buildDir: nuxt.options.buildDir,
-            appConfigFiles,
-            componentDetection,
-            dev: nuxt.options.dev,
-            uiCssContent,
-          },
+          {},
         )
       },
     })
 
-    nuxt.hook('unocss:config' as any, async (config: Record<string, any>) => {
-      const [uiCssContent, appConfigFiles] = await Promise.all([
-        resolveNuxtUiCssContent(nuxt as unknown as { options: Record<string, any> }),
-        resolveNuxtAppConfigPaths(nuxt as unknown as { options: Record<string, any> }),
-      ])
-
-      applyNuxtUiUnoDefaults(config, {
-        buildDir: nuxt.options.buildDir,
-        appConfigFiles,
-        componentDetection: isComponentDetectionEnabled(nuxt as unknown as { options: Record<string, any> }),
-        dev: nuxt.options.dev,
-        uiCssContent,
-      })
+    nuxt.hook('unocss:config' as any, (config: Record<string, any>) => {
+      applyNuxtUiUnoDefaults(config, {})
     })
 
     const compatibilityCssTemplate = addTemplate({
@@ -175,7 +109,7 @@ export default defineNuxtModule<ModuleOptions>({
         config.resolve ||= {}
         config.resolve.alias ||= {}
         if (!Array.isArray(config.resolve.alias)) {
-          addTailwindColorAliases(config.resolve.alias, tailwindColorsCompatPath)
+          addTailwindColorAliases(config.resolve.alias as Record<string, string>, tailwindColorsCompatPath)
         }
       }
 

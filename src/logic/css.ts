@@ -10,22 +10,17 @@ export function prependCssEntry(entries: string[], source: string) {
   return [source, ...entries]
 }
 
+/*
+* body {
+*   @apply antialiased text-default bg-default scheme-light dark:scheme-dark;
+* }
+*/
 export function buildCompatibilityCss() {
-  return `@layer components, base, properties, theme, preflights, shortcuts, default;
-
-body {
+  return `body {
   color: var(--ui-text);
   background-color: var(--ui-bg);
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
-}
-
-/* preflight nuxt-ui gap classes */
-.\\[--gap\\:--spacing\\(4\\)\\] {
-  --gap: calc(var(--spacing) * 4);
-}
-.\\[--gap\\:--spacing\\(16\\)\\] {
-  --gap: calc(var(--spacing) * 16);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 `
 }

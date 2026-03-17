@@ -1,7 +1,6 @@
 import type { Rule, RuleContext } from '@unocss/core'
 import type { Theme } from '@unocss/preset-wind4'
 import type { resolveTheme } from './theme'
-import { notLastChildSelectorVariant } from '@unocss/preset-wind4/rules'
 import { colorCSSGenerator, defineProperty } from '@unocss/preset-wind4/utils'
 
 type ThemeStringMap = Record<string, string>
@@ -373,60 +372,6 @@ export function getRules(theme: ReturnType<typeof resolveTheme>, colorSpace: str
         }
       },
       { autocomplete: 'transition-[prop1,prop2]' },
-    ],
-  ]
-}
-
-export function getExtraRules(): Rule<Theme>[] {
-  return [
-    // space-x-px, space-y-px (-space-x-px, -space-y-px)
-    [
-      /^space-([xy])-px$/,
-      ([matcher, direction], configs) => {
-        const inlineOrBlock = direction === 'x' ? 'inline' : 'block'
-        return [
-          defineProperty(`--un-space-${direction}-reverse`, { syntax: '*', inherits: false, initialValue: '0' }),
-          {
-            [configs.symbols.variants]: [notLastChildSelectorVariant(matcher)],
-            [`--un-space-${direction}-reverse`]: '0',
-            [`margin-${inlineOrBlock}-start`]: `calc(1px * var(--un-space-${direction}-reverse))`,
-            [`margin-${inlineOrBlock}-end`]: `calc(1px * calc(1 - var(--un-space-${direction}-reverse)))`,
-          },
-        ]
-      },
-      { autocomplete: ['space-(x|y)-px', '-space-(x|y)-px'] },
-    ],
-    // space-x-<number>px, space-y-<number>px (-space-x-<number>px, -space-y-<number>px)
-    [
-      /^space-([xy])-(\d+)px$/,
-      ([matcher, direction, size], configs) => {
-        const inlineOrBlock = direction === 'x' ? 'inline' : 'block'
-        return [
-          defineProperty(`--un-space-${direction}-reverse`, { syntax: '*', inherits: false, initialValue: '0' }),
-          {
-            [configs.symbols.variants]: [notLastChildSelectorVariant(matcher)],
-            [`--un-space-${direction}-reverse`]: '0',
-            [`margin-${inlineOrBlock}-start`]: `calc(${size}px * var(--un-space-${direction}-reverse))`,
-            [`margin-${inlineOrBlock}-end`]: `calc(${size}px * calc(1 - var(--un-space-${direction}-reverse)))`,
-          },
-        ]
-      },
-    ],
-    // space-x-<number>, space-y-<number> (-space-x-<number>, -space-y-<number>)
-    [
-      /^space-([xy])-(\d+)$/,
-      ([matcher, direction, size], configs) => {
-        const inlineOrBlock = direction === 'x' ? 'inline' : 'block'
-        return [
-          defineProperty(`--un-space-${direction}-reverse`, { syntax: '*', inherits: false, initialValue: '0' }),
-          {
-            [configs.symbols.variants]: [notLastChildSelectorVariant(matcher)],
-            [`--un-space-${direction}-reverse`]: '0',
-            [`margin-${inlineOrBlock}-start`]: `calc(calc(var(--spacing) * ${size}) * var(--un-space-${direction}-reverse))`,
-            [`margin-${inlineOrBlock}-end`]: `calc(calc(var(--spacing) * ${size}) * calc(1 - var(--un-space-${direction}-reverse)))`,
-          },
-        ]
-      },
     ],
   ]
 }

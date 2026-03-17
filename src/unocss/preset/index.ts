@@ -1,7 +1,7 @@
 import type { Preset, UtilObject } from '@unocss/core'
 import { definePreset } from '@unocss/core'
 import { getPreflights } from './preflights'
-import { getExtraRules, getRules } from './rules'
+import { getRules } from './rules'
 import { resolveTheme } from './theme'
 import { getVariants } from './variants'
 
@@ -48,17 +48,6 @@ export const presetNuxtUI = definePreset((options: PresetOptions = {}) => {
     variants: getVariants(),
     safelist,
     postprocess: [postProcessFn],
-  }
-})
-
-export const presetNuxtUIExtra = definePreset(() => {
-  return {
-    name: 'unocss-nuxt-ui-extra',
-    shortcuts: [
-      ['space-x--px', 'space-x--1px'],
-      ['space-y--px', 'space-y--1px'],
-    ],
-    rules: getExtraRules(),
   }
 })
 

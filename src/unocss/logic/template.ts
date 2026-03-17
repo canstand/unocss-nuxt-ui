@@ -1,17 +1,16 @@
-import type { NuxtUiPipelineContext } from './pipeline'
+import type { NuxtUiPipelineContext } from './defaults'
+import { relative } from 'node:path'
 import { findPath } from 'nuxt/kit'
-import {
-  defaultPipelineInclude,
-  getRequiredNuxtUiFilesystemContent,
-  getRequiredNuxtUiPipelineInclude,
-} from './pipeline'
+import { defaultPipelineInclude, getRequiredNuxtUiPipelineInclude } from './defaults'
 
 export interface UnoConfigLayerOptions {
   configFile?: string | string[]
   nuxtLayers?: boolean
 }
 
-export interface NuxtUiUnoConfigTemplateOptions extends NuxtUiPipelineContext {}
+export interface NuxtUiUnoConfigTemplateOptions extends NuxtUiPipelineContext {
+  buildDir?: string
+}
 
 interface NuxtLayerRoot {
   config: {
@@ -23,6 +22,19 @@ interface NuxtLike {
   options: {
     _layers: readonly NuxtLayerRoot[]
   }
+}
+
+function toTemplateImportPath(path: string, buildDir?: string) {
+  if (!buildDir) {
+    return path
+  }
+
+  const relativePath = relative(buildDir, path).replace(/\\/g, '/')
+  if (relativePath.startsWith('../') || relativePath.startsWith('./')) {
+    return relativePath
+  }
+
+  return `./${relativePath}`
 }
 
 export async function resolveUnoLayerConfigPaths(nuxt: NuxtLike, configFile?: string | string[]) {
@@ -39,18 +51,14 @@ export function getNuxtUiUnoConfigTemplate(
   layerConfigPaths: string[] = [],
   options: NuxtUiUnoConfigTemplateOptions = {},
 ) {
-  const pipelineIncludes = getRequiredNuxtUiPipelineInclude(options)
+  const pipelineIncludes = getRequiredNuxtUiPipelineInclude()
     .map(pattern => `      ${pattern.toString()},`)
     .join('\n')
-  const filesystemEntries = getRequiredNuxtUiFilesystemContent(options)
-  const filesystemLines = filesystemEntries.length > 0
-    ? `    filesystem: [\n${filesystemEntries.map(entry => `      ${JSON.stringify(entry)},`).join('\n')}\n    ],\n`
-    : ''
 
   const imports = [
     `import { defineConfig, mergeConfigs, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'`,
-    `import { presetNuxtUI, presetNuxtUIExtra } from 'unocss-nuxt-ui'`,
-    ...layerConfigPaths.map((path, index) => `import layerConfig${index} from ${JSON.stringify(path)}`),
+    `import { presetNuxtUI } from 'unocss-nuxt-ui'`,
+    ...layerConfigPaths.map((path, index) => `import layerConfig${index} from ${JSON.stringify(toTemplateImportPath(path, options.buildDir))}`),
   ]
 
   const configNames = [...layerConfigPaths.map((_, index) => `layerConfig${index}`), 'config']
@@ -65,7 +73,6 @@ export function getNuxtUiUnoConfigTemplate(
   presets: [
     presetNuxtUI(),
     presetWind4(),
-    presetNuxtUIExtra(),
   ],
   transformers: [
     transformerDirectives(),
@@ -78,7 +85,7 @@ ${defaultIncludes}
 ${pipelineIncludes}
       ],
     },
-${filesystemLines}  },
+  },
   outputToCssLayers: true,
 })`,
     `export default mergeConfigs([${configNames.join(', ')}])`,

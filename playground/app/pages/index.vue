@@ -11,7 +11,7 @@ const buttonVariants = ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'] a
 const selectVariants = ['outline', 'soft', 'subtle', 'ghost', 'none'] as const
 const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral'] as const
 const fruits = ['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple']
-const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek', 'Fresh Brussels Sprouts']
+const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek', 'Fresh Brussels Sprouts not long enough']
 const items = [
   [{ label: 'Fruits', type: 'label' as const }, ...fruits],
   [{ label: 'Vegetables', type: 'label' as const }, ...vegetables],
@@ -116,7 +116,7 @@ function handleToggleDarkMode() {
           </div>
 
           <div class="mt-6xl flex flex-wrap gap-lg max-w-200 items-center justify-center">
-            <UInput placeholder="app.config.ts customize order-last" />
+            <UInput placeholder="app.config.ts customize" class="order-last" />
             <UCollapsible class="flex flex-col gap-2 w-48">
               <UButton label="Open" color="neutral" variant="subtle" trailing-icon="i-lucide-chevron-down" block />
 

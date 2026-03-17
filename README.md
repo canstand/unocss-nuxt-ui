@@ -19,7 +19,7 @@ This project is inspired by [lehuuphuc/unocss-preset-nuxt-ui](https://github.com
 - Ensures the UnoCSS config includes:
   - `presetNuxtUI()`
   - `presetWind4(...)`
-  - `presetNuxtUIExtra()`
+  - `presetNuxtUIExtra()` by default
   - `transformerDirectives()`
   - `transformerVariantGroup({ separators: [':'] })`
 - Removes the Tailwind Vite plugin that `@nuxt/ui` would otherwise inject
@@ -78,6 +78,18 @@ to
 ```
 
 That's it.
+
+If you want to disable `presetNuxtUIExtra()`, set:
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['unocss-nuxt-ui'],
+  unocssNuxtUi: {
+    presetNuxtUIExtra: false,
+  },
+})
+```
 
 ## Recommended Nuxt UI Config
 
