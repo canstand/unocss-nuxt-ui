@@ -19,18 +19,17 @@ This project is inspired by [lehuuphuc/unocss-preset-nuxt-ui](https://github.com
 - Ensures the UnoCSS config includes:
   - `presetNuxtUI()`
   - `presetWind4(...)`
-  - `presetNuxtUIExtra()` by default
   - `transformerDirectives()`
   - `transformerVariantGroup({ separators: [':'] })`
 - Removes the Tailwind Vite plugin that `@nuxt/ui` would otherwise inject
 - Rewrites Tailwind-style `bg-(--ui-bg-accented)/50` syntax into UnoCSS-compatible `bg-[var(--ui-bg-accented)]/50` utilities
 - Injects the compatibility CSS and `@nuxt/ui` runtime keyframes needed by the UI package
 - Injects runtime color variables derived from `app.config.ts`
-- Scans generated `.nuxt/ui/*.ts` theme files and source `app.config.*` files from all Nuxt layers
+- Automatically scans generated `.nuxt/ui/*.ts` theme files and `app.config.*` files across all Nuxt layers via optimized regex patterns
 
 ## Requirements
 
-- `nuxt >= 3.10.0`
+- `nuxt >= 4.0.0`
 - `@nuxt/ui >= 4.0.0`
 - `unocss >= 0.66.0`
 - `@unocss/nuxt >= 0.66.0`
@@ -77,23 +76,9 @@ to
 }
 ```
 
-That's it.
+## Nuxt UI Component Detection
 
-If you want to disable `presetNuxtUIExtra()`, set:
-
-```ts
-// nuxt.config.ts
-export default defineNuxtConfig({
-  modules: ['unocss-nuxt-ui'],
-  unocssNuxtUi: {
-    presetNuxtUIExtra: false,
-  },
-})
-```
-
-## Recommended Nuxt UI Config
-
-Enable Nuxt UI component detection:
+You can enable Nuxt UI component detection to reduce the generated CSS size:
 
 ```ts
 // nuxt.config.ts
@@ -107,12 +92,7 @@ export default defineNuxtConfig({
 })
 ```
 
-When `ui.experimental.componentDetection` is enabled:
-
-- `dev`: the module keeps scanning all generated Nuxt UI theme files to avoid missed styles during HMR
-- `build`: the module narrows UnoCSS scanning to the generated theme files for the detected components
-
-You do not need to add custom `.ts` scan globs in `uno.config.ts` for Nuxt UI theme files.
+The module automatically handles the scanning of the relevant generated files in both development and production. You do not need to add custom scan globs in `uno.config.ts` for Nuxt UI theme files.
 
 ## Working With `uno.config.ts`
 
@@ -137,17 +117,15 @@ export default mergeConfigs([
 ])
 ```
 
-If you use UnoCSS layer config merging with `unocss.nuxtLayers`, the generated Uno config from this module will also merge layer-level Uno config files.
-
 ## `app.config.ts` Support
 
-Nuxt UI stores a large part of its theme outside Vue SFCs, and user overrides are merged through `app.config.ts`. This module scans:
+Nuxt UI stores a large part of its theme outside Vue SFCs, and user overrides are merged through `app.config.ts`. This module automatically scans:
 
-- generated `.nuxt/ui/*.ts` files
-- generated `.nuxt/app.config.*`
-- source `app.config.*` files from all Nuxt layers
+- Generated `.nuxt/ui/*.ts` theme files
+- Generated `.nuxt/app.config.*` virtual files
+- Source `app.config.*` files from all Nuxt layers
 
-That is what allows utilities referenced in theme overrides such as:
+This allows utilities referenced in theme overrides to be correctly processed by UnoCSS:
 
 ```ts
 // app.config.ts
@@ -162,32 +140,26 @@ export default defineAppConfig({
 })
 ```
 
-to be emitted correctly by UnoCSS.
-
 ## Compatibility Notes
 
 - [#5151](https://github.com/unocss/unocss/issues/5151) : `calc(var(--some)+--space(16))` do not work.
 - The module currently exposes no module options. Compatibility behavior is enabled by default.
-- Build-time narrowing is precise for generated Nuxt UI theme files.
 
 ## Exported Presets
 
-The package also exports presets for non-module usage:
+The package also exports the core preset for non-module usage:
 
 ```ts
 import { defineConfig, presetWind4 } from 'unocss'
-import { presetNuxtUI, presetNuxtUIExtra } from 'unocss-nuxt-ui/preset'
+import { presetNuxtUI } from 'unocss-nuxt-ui/preset'
 
 export default defineConfig({
   presets: [
     presetNuxtUI(),
     presetWind4(),
-    presetNuxtUIExtra(),
   ],
 })
 ```
-
-For Nuxt applications, prefer the module unless you have a specific reason to wire everything manually.
 
 ## Local Development
 

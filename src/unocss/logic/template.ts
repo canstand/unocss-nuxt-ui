@@ -3,11 +3,6 @@ import { relative } from 'node:path'
 import { findPath } from 'nuxt/kit'
 import { defaultPipelineInclude, getRequiredNuxtUiPipelineInclude } from './defaults'
 
-export interface UnoConfigLayerOptions {
-  configFile?: string | string[]
-  nuxtLayers?: boolean
-}
-
 export interface NuxtUiUnoConfigTemplateOptions extends NuxtUiPipelineContext {
   buildDir?: string
 }
