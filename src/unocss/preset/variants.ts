@@ -2,6 +2,14 @@ import type { Variant } from '@unocss/core'
 
 export function getVariants(): Variant[] {
   return [
+    // fix calc with --spacing(n)
+    (matcher) => {
+      if (!matcher.includes('--spacing(')) {
+        return matcher
+      }
+
+      return matcher.replace(/--spacing\((\d+)\)/g, 'calc(var(--spacing) * $1)')
+    },
     // data-xxx:...  -> ....[data-xxx] { ... }
     (matcher) => {
       const match = matcher.match(/^data-([a-zA-Z0-9-]+):(.*)$/)
