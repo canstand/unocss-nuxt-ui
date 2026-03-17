@@ -58,7 +58,7 @@
   "peerDependencies": {
     "@nuxt/ui": ">=4.0.0",
     "@unocss/nuxt": ">=0.66.0",
-    "nuxt": ">=3.10.0",
+    "nuxt": ">=4.0.0",
     "unocss": ">=0.66.0"
   },
   "dependencies": {

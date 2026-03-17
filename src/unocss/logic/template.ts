@@ -48,8 +48,7 @@ export function getNuxtUiUnoConfigTemplate(
     : ''
 
   const imports = [
-    `import presetWind4 from '@unocss/preset-wind4'`,
-    `import { defineConfig, mergeConfigs, transformerDirectives, transformerVariantGroup } from 'unocss'`,
+    `import { defineConfig, mergeConfigs, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'`,
     `import { presetNuxtUI, presetNuxtUIExtra } from 'unocss-nuxt-ui'`,
     ...layerConfigPaths.map((path, index) => `import layerConfig${index} from ${JSON.stringify(path)}`),
   ]
@@ -65,10 +64,7 @@ export function getNuxtUiUnoConfigTemplate(
     `const config = defineConfig({
   presets: [
     presetNuxtUI(),
-    presetWind4({
-      preflights: { reset: true, theme: 'on-demand' },
-      dark: { dark: '.dark', light: '.light' },
-    }),
+    presetWind4(),
     presetNuxtUIExtra(),
   ],
   transformers: [

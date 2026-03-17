@@ -1,5 +1,4 @@
 import type { NuxtUiPipelineContext } from './pipeline'
-// import presetWind4 from '@unocss/preset-wind4';
 import { presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'
 import { presetNuxtUI, presetNuxtUIExtra } from '../../preset'
 import {
