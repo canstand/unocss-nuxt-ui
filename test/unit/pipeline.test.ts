@@ -3,10 +3,22 @@ import { getRequiredNuxtUiPipelineInclude } from '../../src/unocss/logic/default
 
 describe('nuxt UI pipeline include selection', () => {
   it('returns required includes', () => {
-    const include = getRequiredNuxtUiPipelineInclude().map(pattern => pattern.toString())
+    const include = getRequiredNuxtUiPipelineInclude()
 
-    expect(include.some(i => i.includes('[\\\\/]\\.nuxt[\\\\/](?:ui[\\\\/].+\\.ts|app\\.config\\.(?:m?js|m?ts))'))).toBe(true)
-    expect(include.some(i => i.includes('%2F\\.nuxt%2F(?:ui%2F.+\\.ts|app\\.config\\.(?:m?js|m?ts))'))).toBe(true)
-    expect(include).toContain('/[\\\\/]app\\.config\\.(?:m?js|m?ts)($|\\?)/')
+    const paths = [
+      'virtual:nuxt:/path/to/.nuxt/ui/button.ts',
+      'virtual:nuxt:%2Fpath%2Fto%2F.nuxt%2Fui%2Fbutton.ts',
+      'app.config.ts',
+      '/path/to/.nuxt/app.config.ts',
+    ]
+
+    for (const path of paths) {
+      expect(include.some((pattern) => {
+        if (pattern instanceof RegExp) {
+          return pattern.test(path)
+        }
+        return false
+      }), `Pattern should match ${path}`).toBe(true)
+    }
   })
 })

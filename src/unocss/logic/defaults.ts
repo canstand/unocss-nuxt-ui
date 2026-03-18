@@ -5,13 +5,14 @@ type FilterPattern = RegExp | string | ((id: string) => boolean)
 
 export interface NuxtUiPipelineContext {}
 
-export const defaultPipelineInclude = [/\.(vue|svelte|[jt]sx|vine.ts|mdx?|astro|elm|php|phtml|marko|html)($|\?)/]
+export const defaultPipelineInclude = [/\.(vue|svelte|[jt]sx|vine.ts|md[cx]?|astro|elm|php|phtml|marko|html)($|\?)/]
 
 export function getRequiredNuxtUiPipelineInclude(): FilterPattern[] {
   return [
-    /[\\/]\.nuxt[\\/](?:ui[\\/].+\.ts|app\.config\.(?:m?js|m?ts))($|\?)/,
-    /%2F\.nuxt%2F(?:ui%2F.+\.ts|app\.config\.(?:m?js|m?ts))($|\?)/,
-    /[\\/]app\.config\.(?:m?js|m?ts)($|\?)/,
+    /virtual:nuxt:.+[\\/]ui[\\/].+\.ts($|\?)/,
+    /virtual:nuxt:.+%2Fui%2F.+\.ts($|\?)/,
+    /(^|[\\/])app\.config\.ts($|\?)/,
+    // /virtual:nuxt:.+%2Fapp\.config\.mjs($|\?)/,   // for inlineConfig, currently no classes—only icons.
   ]
 }
 

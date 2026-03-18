@@ -73,7 +73,9 @@ export default defineNuxtModule<ModuleOptions>({
 
         return getNuxtUiUnoConfigTemplate(
           layerConfigPaths.reverse(),
-          {},
+          {
+            buildDir: nuxt.options.buildDir,
+          },
         )
       },
     })
