@@ -58,7 +58,7 @@
   "peerDependencies": {
     "@nuxt/ui": ">=4.0.0",
     "@unocss/nuxt": ">=0.66.0",
-    "nuxt": ">=4.0.0",
+    "nuxt": ">=4.1.0",
     "unocss": ">=0.66.0"
   },
   "dependencies": {
@@ -70,25 +70,32 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "@iconify-json/lucide": "catalog:",
+    "@iconify-json/simple-icons": "catalog:",
+    "@nuxt/content": "catalog:",
     "@nuxt/devtools": "catalog:",
     "@nuxt/eslint-config": "catalog:",
     "@nuxt/module-builder": "catalog:",
     "@nuxt/schema": "catalog:",
     "@nuxt/test-utils": "catalog:",
     "@nuxt/ui": "catalog:",
+    "@nuxtjs/mdc": "catalog:",
     "@types/node": "catalog:",
     "@unhead/vue": "catalog:",
     "@unocss/eslint-plugin": "catalog:",
+    "@vueuse/core": "catalog:",
+    "better-sqlite3": "catalog:",
     "changelogen": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-format": "catalog:",
     "lint-staged": "catalog:",
     "nuxt": "catalog:",
+    "scule": "catalog:",
     "simple-git-hooks": "catalog:",
     "typescript": "catalog:",
     "unocss": "catalog:",
     "vitest": "catalog:",
-    "vue-tsc": "catalog:"
+    "vue-tsc": "catalog:",
+    "zod": "catalog:"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

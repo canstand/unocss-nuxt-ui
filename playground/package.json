@@ -8,6 +8,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "better-sqlite3": "catalog:",
     "nuxt": "catalog:",
     "unocss-nuxt-ui": "workspace:*"
   },

@@ -10,6 +10,9 @@ export default antfu({
   formatters: true,
 })
   .removeRules('e18e/prefer-static-regex')
+  .overrideRules({
+    'no-console': 'off',
+  })
   .append(createConfigForNuxt({
     features: {
       // Rules for module authors
