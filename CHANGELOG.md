@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v1.1.1
+
+[compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.1.0...v1.1.1)
+
+### 🩹 Fixes
+
+- Remove duplicate Nuxt UI colors injection ([9c4bd43](https://github.com/canstand/unocss-nuxt-ui/commit/9c4bd43))
+
+### 🏡 Chore
+
+- Playground from nuxt ui ([e831d4d](https://github.com/canstand/unocss-nuxt-ui/commit/e831d4d))
+- Update deps ([f58043d](https://github.com/canstand/unocss-nuxt-ui/commit/f58043d))
+
+### ❤️ Contributors
+
+- Can Stand <canstand@outlook.com>
+
 ## v1.1.0
 
 [compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.0.2...v1.1.0)

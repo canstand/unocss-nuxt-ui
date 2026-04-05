@@ -1,7 +1,7 @@
 {
   "name": "unocss-nuxt-ui",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "packageManager": "pnpm@10.33.0",
   "description": "Use UnoCSS with Nuxt UI without Tailwind CSS",
   "license": "MIT",
