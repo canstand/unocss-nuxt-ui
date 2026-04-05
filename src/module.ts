@@ -1,6 +1,5 @@
 import { dirname, join } from 'node:path'
 import {
-  addPlugin,
   addTemplate,
   createResolver,
   defineNuxtModule,
@@ -101,10 +100,6 @@ export default defineNuxtModule<ModuleOptions>({
       const keyframesPath = join(dirname(uiEntryPath), 'runtime/keyframes.css')
       nuxt.options.css = prependCssEntry(nuxt.options.css || [], keyframesPath)
     }
-
-    addPlugin({
-      src: resolve('./runtime/colors'),
-    })
 
     nuxt.hook('vite:extend', async ({ config }) => {
       if (options.tailwindColorsAlias) {
