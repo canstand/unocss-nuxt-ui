@@ -24,7 +24,7 @@ const variant = ref('sidebar' as keyof typeof theme.variants.variant)
       </template>
 
       <UNavigationMenu
-        :items="[{ label: 'Home', icon: 'i-lucide-home', to: '/', badge: 4 }, { label: 'Chat', icon: 'i-lucide-message-circle', to: '/chat' }]"
+        :items="[{ label: 'Home', icon: 'i-lucide-home', to: '/', badge: 4 }]"
         orientation="vertical"
         :ui="{ link: 'p-1.5 overflow-hidden' }"
       />
