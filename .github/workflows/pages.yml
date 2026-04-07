@@ -35,6 +35,9 @@ jobs:
       - name: Install
         run: nci
 
+      - name: Build module
+        run: pnpm run prepack
+
       - name: Generate
         run: NUXT_APP_BASE_URL=/ pnpm run dev:generate
 
