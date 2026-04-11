@@ -1,21 +1,3 @@
-const styleLikeRequestPattern = /\.(?:vue|css|postcss|scss|sass|less|styl|stylus|md|mdc)(?:$|\?)/
-
-export function isStyleLikeRequest(id: string) {
-  return id.includes('?vue&type=style') || styleLikeRequestPattern.test(id)
-}
-
-export function normalizeTailwindVarSyntaxTokens(code: string) {
-  return code.replace(/(^|[\s"'`])((?:[!\w-]+:)*[!-]?[\w-]+)-\((--[\w-]+)\)(\/\d+)?(?=$|[\s"'`);},])/g, (
-    full,
-    prefix: string,
-    utilityWithVariants: string,
-    cssVar: string,
-    opacity = '',
-  ) => {
-    return `${prefix}${utilityWithVariants}-[var(${cssVar})]${opacity}`
-  })
-}
-
 function isTailwindVitePlugin(item: unknown): item is { name: string } {
   return typeof item === 'object'
     && item !== null

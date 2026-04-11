@@ -6,13 +6,13 @@ trustPolicyExclude:
   - semver@6.3.1
 packages:
   - playground
-overrides:
-  vite: ^8.0.3
 
+overrides:
+  vite: ^8.0.8
 catalog:
   '@antfu/eslint-config': ^7.7.3
-  '@iconify-json/lucide': ^1.2.101
-  '@iconify-json/simple-icons': ^1.2.76
+  '@iconify-json/lucide': ^1.2.102
+  '@iconify-json/simple-icons': ^1.2.77
   '@iconify-json/vscode-icons': ^1.2.45
   '@nuxt/content': ^3.12.0
   '@nuxt/devtools': ^3.2.4
@@ -20,29 +20,31 @@ catalog:
   '@nuxt/kit': ^4.4.2
   '@nuxt/module-builder': ^1.0.2
   '@nuxt/schema': ^4.4.2
-  '@nuxt/test-utils': ^4.0.0
+  '@nuxt/test-utils': ^4.0.2
   '@nuxt/ui': ^4.6.1
   '@nuxtjs/mdc': ^0.21.1
   '@types/node': latest
-  '@unhead/vue': ^2.1.12
-  '@unocss/core': ^66.6.7
-  '@unocss/eslint-plugin': ^66.6.7
-  '@unocss/nuxt': ^66.6.7
-  '@unocss/preset-wind4': ^66.6.7
+  '@unhead/vue': ^2.1.13
+  '@unocss/core': ^66.6.8
+  '@unocss/eslint-plugin': ^66.6.8
+  '@unocss/nuxt': ^66.6.8
+  '@unocss/preset-wind4': ^66.6.8
   '@vueuse/core': ^14.2.1
   better-sqlite3: ^12.8.0
   changelogen: ^0.6.2
-  defu: ^6.1.6
+  defu: ^6.1.7
   eslint: ^10.2.0
   eslint-plugin-format: ^2.0.1
   lint-staged: ^16.4.0
   nuxt: ^4.4.2
   scule: ^1.3.0
   simple-git-hooks: ^2.13.1
-  typescript: ~5.9.3
-  unocss: ^66.6.7
-  vitest: ^4.1.2
+  typescript: ~6.0.2
+  unocss: ^66.6.8
+  vitest: ^4.1.4
   vue-tsc: ^3.2.6
   zod: ^4.3.6
+ignoredBuiltDependencies:
+  - vue-demi
 onlyBuiltDependencies:
   - better-sqlite3

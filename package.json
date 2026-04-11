@@ -58,9 +58,9 @@
   },
   "peerDependencies": {
     "@nuxt/ui": ">=4.0.0",
-    "@unocss/nuxt": ">=0.66.0",
+    "@unocss/nuxt": ">=66.6.8",
     "nuxt": ">=4.1.0",
-    "unocss": ">=0.66.0"
+    "unocss": ">=66.6.8"
   },
   "dependencies": {
     "@nuxt/kit": "catalog:",

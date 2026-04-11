@@ -22,17 +22,16 @@ This project is inspired by [lehuuphuc/unocss-preset-nuxt-ui](https://github.com
   - `transformerDirectives()`
   - `transformerVariantGroup({ separators: [':'] })`
 - Removes the Tailwind Vite plugin that `@nuxt/ui` would otherwise inject
-- Rewrites Tailwind-style `bg-(--ui-bg-accented)/50` syntax into UnoCSS-compatible `bg-[var(--ui-bg-accented)]/50` utilities
 - Injects the compatibility CSS and `@nuxt/ui` runtime keyframes needed by the UI package
 - Injects runtime color variables derived from `app.config.ts`
 - Automatically scans generated `.nuxt/ui/*.ts` theme files and `app.config.*` files across all Nuxt layers via optimized regex patterns
 
 ## Requirements
 
-- `nuxt >= 4.0.0`
+- `nuxt >= 4.1.0`
 - `@nuxt/ui >= 4.0.0`
-- `unocss >= 0.66.0`
-- `@unocss/nuxt >= 0.66.0`
+- `unocss >= 66.6.8`
+- `@unocss/nuxt >= 66.6.8`
 
 ## Install
 

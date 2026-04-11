@@ -35,15 +35,24 @@ describe('presetNuxtUI', () => {
     expect(css).toContain('color:color-mix(in oklab, var(--primary) 80%, transparent)')
   })
 
-  it('should generate group-data-active:text-md variant', async () => {
-    const { css } = await uno.generate('group-data-active:text-md', { preflights: false })
-    expect(css).toContain('&:is(:where(.group)[data-active] *)')
+  it.each([
+    ['data-active:text-md', '[data-active]'],
+    ['not-data-active:text-md', ':not([data-active])'],
+    ['group-data-active:text-md', '&:is(:where(.group)[data-active] *)'],
+    ['not-group-data-active:text-md', '&:not(*:is(:where(.group)[data-active] *))'],
+    ['group-first:text-md', '&:is(:where(.group):first-child *)'],
+    ['group-last:text-md', '&:is(:where(.group):last-child *)'],
+    ['group-only:text-md', '&:is(:where(.group):only-child *)'],
+    ['group-not-first:text-md', '&:is(:where(.group):not(*:first-child) *)'],
+    ['group-not-last:text-md', '&:is(:where(.group):not(*:last-child) *)'],
+    ['group-not-only:text-md', '&:is(:where(.group):not(*:only-child) *)'],
+    ['not-only:text-md', '&:not(*:only-child)'],
+    ['peer-data-active:text-md', '&:is(:where(.peer)[data-active] ~ *)'],
+    ['not-peer-data-active:text-md', '&:is(:where(.peer):not(*[data-active]) ~ *)'],
+  ])('should generate %s variant', async (input, selector) => {
+    const { css } = await uno.generate(input, { preflights: false })
+    expect(css).toContain(selector)
     expect(css).toContain('font-size:var(--text-base-fontSize)')
-  })
-
-  it('should generate peer-data-active:text-md variant', async () => {
-    const { css } = await uno.generate('peer-data-active:text-md', { preflights: false })
-    expect(css).toContain('&:is(:where(.peer)[data-active] ~ *)')
   })
 
   it('should generate radius utilities', async () => {

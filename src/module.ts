@@ -9,7 +9,7 @@ import {
 import { buildCompatibilityCss, prependCssEntry } from './logic/css'
 import { applyNuxtUiUnoDefaults } from './unocss/logic/defaults'
 import { getNuxtUiUnoConfigTemplate, resolveUnoLayerConfigPaths } from './unocss/logic/template'
-import { isStyleLikeRequest, normalizeTailwindVarSyntaxTokens, stripTailwindVitePlugins } from './vite/transform'
+import { stripTailwindVitePlugins } from './vite/transform'
 
 export * from './preset'
 
@@ -109,34 +109,6 @@ export default defineNuxtModule<ModuleOptions>({
           addTailwindColorAliases(config.resolve.alias as Record<string, string>, tailwindColorsCompatPath)
         }
       }
-
-      config.plugins ||= []
-      config.plugins.push({
-        name: 'unocss-nuxt-ui:normalize-tailwind-var-syntax',
-        enforce: 'pre',
-        transform(code, id) {
-          if (!isStyleLikeRequest(id) || !code.includes('-(--')) {
-            return null
-          }
-
-          const patched = normalizeTailwindVarSyntaxTokens(code)
-          if (patched === code) {
-            return null
-          }
-
-          return {
-            code: patched,
-            map: {
-              version: 3,
-              file: id,
-              sources: [id],
-              sourcesContent: [code],
-              names: [],
-              mappings: '',
-            },
-          }
-        },
-      })
 
       config.plugins = stripTailwindVitePlugins(config.plugins)
     })
