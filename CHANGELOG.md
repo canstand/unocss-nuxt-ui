@@ -1,6 +1,29 @@
 # Changelog
 
 
+## v1.2.0
+
+[compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.1.1...v1.2.0)
+
+### 🚀 Enhancements
+
+- New unocss version and cleanup unnecessary variants ([49d5000](https://github.com/canstand/unocss-nuxt-ui/commit/49d5000))
+
+### 🏡 Chore
+
+- Try deploy github pages ([9079537](https://github.com/canstand/unocss-nuxt-ui/commit/9079537))
+
+### 🤖 CI
+
+- Should build module first ([3b28af6](https://github.com/canstand/unocss-nuxt-ui/commit/3b28af6))
+- Prepare first ([13489e7](https://github.com/canstand/unocss-nuxt-ui/commit/13489e7))
+- Wrong path ([ccb5b6c](https://github.com/canstand/unocss-nuxt-ui/commit/ccb5b6c))
+- Change base url ([38ad430](https://github.com/canstand/unocss-nuxt-ui/commit/38ad430))
+
+### ❤️ Contributors
+
+- Can Stand <canstand@outlook.com>
+
 ## v1.1.1
 
 [compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.1.0...v1.1.1)
