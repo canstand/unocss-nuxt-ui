@@ -30,8 +30,8 @@ This project is inspired by [lehuuphuc/unocss-preset-nuxt-ui](https://github.com
 
 - `nuxt >= 4.1.0`
 - `@nuxt/ui >= 4.0.0`
-- `unocss >= 66.6.8`
-- `@unocss/nuxt >= 66.6.8`
+- `unocss >= 66.7.0`
+- `@unocss/nuxt >= 66.7.0`
 
 ## Install
 
@@ -141,8 +141,8 @@ export default defineAppConfig({
 
 ## Compatibility Notes
 
-- [#5151](https://github.com/unocss/unocss/issues/5151) : `calc(var(--some)+--space(16))` do not work.
-- The module currently exposes no module options. Compatibility behavior is enabled by default.
+- This module does not add any additional Tailwind CSS features that are not yet supported by UnoCSS `presetWind4`.
+- By default, this module fills in, as much as possible, syntax used by Nuxt UI that is not directly supported by `presetWind4`.
 
 ## Exported Presets
 
