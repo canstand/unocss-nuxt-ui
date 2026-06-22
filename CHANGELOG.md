@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v1.2.2
+
+[compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.2.1...v1.2.2)
+
+### 🩹 Fixes
+
+- Generate overlay arrow fill color ([89e90ca](https://github.com/canstand/unocss-nuxt-ui/commit/89e90ca))
+
+### 🏡 Chore
+
+- Update deps ([0fed506](https://github.com/canstand/unocss-nuxt-ui/commit/0fed506))
+- Lock nuxt esling-config version ([d487e37](https://github.com/canstand/unocss-nuxt-ui/commit/d487e37))
+
+### ❤️ Contributors
+
+- Can Stand <canstand@outlook.com>
+
 ## v1.2.1
 
 [compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.2.0...v1.2.1)
