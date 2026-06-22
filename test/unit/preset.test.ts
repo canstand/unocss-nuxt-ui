@@ -25,6 +25,13 @@ describe('presetNuxtUI', () => {
     expect(css).toContain('background-color:color-mix(in oklab, var(--ui-bg) var(--un-bg-opacity, 100%), transparent)')
   })
 
+  it('should generate Nuxt UI overlay arrow colors', async () => {
+    const { css } = await uno.generate('fill-bg stroke-default', { preflights: false })
+
+    expect(css).toContain('fill:color-mix(in oklab, var(--ui-bg) var(--un-fill-opacity, 100%), transparent)')
+    expect(css).toContain('stroke:color-mix(in oklab, var(--ui-border) var(--un-stroke-opacity, 100%), transparent)')
+  })
+
   it('should generate text-(--primary) color', async () => {
     const { css } = await uno.generate('text-(--primary)', { preflights: false })
     expect(css).toContain('color:color-mix(in oklab, var(--primary) var(--un-text-opacity), transparent)')

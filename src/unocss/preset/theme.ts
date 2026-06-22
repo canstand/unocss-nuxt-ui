@@ -194,10 +194,12 @@ export function resolveTheme(options: { theme?: PresetThemeOptions } = {}) {
       inverted: 'var(--ui-border-inverted)',
     },
     strokeColors: {
+      bg: 'var(--ui-bg)',
       default: 'var(--ui-border)',
       inverted: 'var(--ui-border-inverted)',
     },
     fillColors: {
+      bg: 'var(--ui-bg)',
       default: 'var(--ui-border)',
       inverted: 'var(--ui-border-inverted)',
     },
