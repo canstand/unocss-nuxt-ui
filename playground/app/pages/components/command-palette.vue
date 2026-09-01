@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { User } from '~/types'
-import theme from '#build/ui/command-palette'
 // import { createReusableTemplate, refDebounced } from '@vueuse/core'
 import { createReusableTemplate } from '@vueuse/core'
+import theme from '#build/ui/command-palette'
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 const toast = useToast()

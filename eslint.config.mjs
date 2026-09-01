@@ -16,7 +16,7 @@ export default antfu({
   .append(createConfigForNuxt({
     features: {
       // Rules for module authors
-      tooling: true,
+      tooling: false,
       // Rules for formatting
       stylistic: true,
       standalone: false,

@@ -1,10 +1,16 @@
 <script setup lang="ts">
+import type { ButtonProps } from '@nuxt/ui'
+
+const actions: ButtonProps[] = [
+  { label: 'Approve', onClick: () => console.log('approve') },
+  { label: 'Deny', color: 'neutral', variant: 'soft', onClick: () => console.log('deny') },
+]
 </script>
 
 <template>
   <Navbar />
 
-  <div class="flex flex-col gap-4 w-60 items-start">
+  <div class="flex flex-col gap-4 w-72 items-start">
     <UChatTool
       text="Searched components"
       icon="i-lucide-search"
@@ -29,9 +35,7 @@
       icon="i-lucide-search"
       chevron="leading"
     >
-      <div class="text-muted text-sm">
-        Found 5 matching components.
-      </div>
+      Found 5 matching components.
     </UChatTool>
 
     <UChatTool
@@ -41,6 +45,18 @@
       class="w-full"
     >
       Found 5 matching components.
+    </UChatTool>
+
+    <UChatTool
+      text="Run terminal command"
+      suffix="pnpm run lint"
+      icon="i-lucide-terminal"
+      variant="card"
+      chevron="leading"
+      class="w-full"
+      :actions="actions"
+    >
+      <pre class="whitespace-pre-wrap">$ pnpm run lint</pre>
     </UChatTool>
   </div>
 </template>

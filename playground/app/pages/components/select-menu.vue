@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { AvatarProps, SelectMenuItem } from '@nuxt/ui'
 import type { User } from '~/types'
-import theme from '#build/ui/select-menu'
 import { refDebounced } from '@vueuse/core'
+import theme from '#build/ui/select-menu'
 
 const colors = Object.keys(theme.variants.color)
 const sizes = Object.keys(theme.variants.size)

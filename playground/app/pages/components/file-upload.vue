@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
-import theme from '#build/ui/file-upload'
 import * as z from 'zod'
+import theme from '#build/ui/file-upload'
 
 const sizes = Object.keys(theme.variants.size)
 const variants = Object.keys(theme.variants.variant)

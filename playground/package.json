@@ -8,12 +8,14 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@comark/vue": "catalog:",
     "better-sqlite3": "catalog:",
     "nuxt": "catalog:",
     "unocss-nuxt-ui": "workspace:*"
   },
   "devDependencies": {
     "@iconify-json/lucide": "catalog:",
+    "@internationalized/date": "catalog:",
     "@nuxt/ui": "catalog:",
     "@unocss/nuxt": "catalog:",
     "unocss": "catalog:"

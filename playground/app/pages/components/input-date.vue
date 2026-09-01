@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import theme from '#build/ui/input-date'
 import { CalendarDate } from '@internationalized/date'
+import theme from '#build/ui/input-date'
 
 const colors = Object.keys(theme.variants.color)
 const variants = Object.keys(theme.variants.variant)

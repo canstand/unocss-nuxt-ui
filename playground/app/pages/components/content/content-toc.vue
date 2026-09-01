@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Markdown } from '@comark/vue'
+
 import theme from '#build/ui/content/content-toc'
 
 const highlight = ref(true)
@@ -122,7 +124,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor i
   </Navbar>
 
   <div class="flex flex-col w-full lg:gap-10 lg:grid lg:grid-cols-10">
-    <MDC :value="value" class="text-muted mx-auto max-w-xl lg:col-span-8" />
+    <Markdown :value="value" class="text-muted mx-auto max-w-xl lg:col-span-8" />
 
     <UContentToc
       :links="links"

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { AvatarProps, InputMenuItem } from '@nuxt/ui'
 import type { User } from '~/types'
-import theme from '#build/ui/input-menu'
 import { refDebounced } from '@vueuse/core'
+import theme from '#build/ui/input-menu'
 
 const colors = Object.keys(theme.variants.color)
 const sizes = Object.keys(theme.variants.size)
@@ -80,6 +80,7 @@ const valueMultiple = ref([fruits[0]!, vegetables[0]!])
       v-bind="props"
       clear
     />
+    <UInputMenu placeholder="Autocomplete" mode="autocomplete" :items="items" v-bind="props" />
     <UInputMenu placeholder="Highlight" highlight :items="items" v-bind="props" />
     <UInputMenu placeholder="Disabled" disabled :items="items" v-bind="props" />
     <UInputMenu placeholder="Required" required :items="items" v-bind="props" />

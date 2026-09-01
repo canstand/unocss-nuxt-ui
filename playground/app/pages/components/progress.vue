@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import theme from '#build/ui/progress'
 import { onMounted, ref } from 'vue'
+import theme from '#build/ui/progress'
 
 const colors = Object.keys(theme.variants.color)
 const sizes = Object.keys(theme.variants.size)
