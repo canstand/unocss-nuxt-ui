@@ -1,3 +1,4 @@
+import { cssIdRE } from '@unocss/core'
 import { presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'
 import { presetNuxtUI } from '../../preset'
 
@@ -108,6 +109,14 @@ function ensurePipelineInclude(config: Record<string, any>) {
     ...include,
     ...requiredNuxtUiPipelineInclude,
   ])
+
+  // UnoCSS treats an empty exclude list as "exclude everything" when it builds
+  // the pipeline filter. `mergeConfigs` normalizes the missing default to an
+  // empty array, so restore the default stylesheet exclusion here.
+  const exclude = toArray<FilterPattern>(config.content.pipeline.exclude as FilterPattern | FilterPattern[])
+  if (exclude.length === 0) {
+    config.content.pipeline.exclude = [cssIdRE]
+  }
 }
 
 export function applyNuxtUiUnoDefaults(config: Record<string, any>, _context: NuxtUiPipelineContext = {}) {

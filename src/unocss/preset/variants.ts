@@ -56,6 +56,28 @@ export function getVariants(): Variant[] {
         },
       }
     },
+    // variant: in-data-xxx:...  -> .in-data-xxx\:... { &:is(:where([data-xxx]) *) { ... } }
+    (matcher) => {
+      const match = matcher.match(/^in-data-([a-zA-Z0-9-]+):(.*)$/)
+
+      if (!match) {
+        return matcher
+      }
+
+      const attr = match[1]
+      const rest = match[2]
+
+      return {
+        matcher: rest,
+        handle(input, next) {
+          return next({
+            ...input,
+            parent: `${input.parent ? `${input.parent} $$ ` : ''}${input.selector}`,
+            selector: `&:is(:where([data-${attr}]) *)`,
+          })
+        },
+      }
+    },
     // not-group-data-xxx:...  -> .not-group-data-xxx\:... { &:not(*:is(:where(.group)[data-xxx] *)) { ... } }
     (matcher) => {
       const match = matcher.match(/^not-group-data-([a-zA-Z0-9-]+):(.*)$/)

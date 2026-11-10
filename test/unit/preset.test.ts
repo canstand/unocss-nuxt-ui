@@ -34,7 +34,7 @@ describe('presetNuxtUI', () => {
 
   it('should generate text-(--primary) color', async () => {
     const { css } = await uno.generate('text-(--primary)', { preflights: false })
-    expect(css).toContain('color:color-mix(in oklab, var(--primary) var(--un-text-opacity), transparent)')
+    expect(css).toContain('color:var(--primary)')
   })
 
   it('should generate text-(--primary)/80 color', async () => {
@@ -46,6 +46,7 @@ describe('presetNuxtUI', () => {
     ['data-active:text-md', '[data-active]'],
     ['not-data-active:text-md', ':not([data-active])'],
     ['group-data-active:text-md', '&:is(:where(.group)[data-active] *)'],
+    ['in-data-measured:text-md', '&:is(:where([data-measured]) *)'],
     ['not-group-data-active:text-md', '&:not(*:is(:where(.group)[data-active] *))'],
     ['group-first:text-md', '&:is(:where(.group):first-child *)'],
     ['group-last:text-md', '&:is(:where(.group):last-child *)'],
@@ -65,5 +66,13 @@ describe('presetNuxtUI', () => {
   it('should generate radius utilities', async () => {
     const { css } = await uno.generate('rounded-sm', { preflights: false })
     expect(css).toContain('border-radius:var(--radius-sm)')
+  })
+
+  it('should define the Nuxt UI chart colors in preflights', async () => {
+    const { css } = await uno.generate('', { preflights: true })
+
+    expect(css).toContain('--ui-chart-1: var(--ui-primary)')
+    expect(css).toContain('--ui-chart-2: var(--color-blue-500, oklch(62.3% 0.214 259.815))')
+    expect(css).toContain('--ui-chart-2: var(--color-blue-400, oklch(70.7% 0.165 254.624))')
   })
 })

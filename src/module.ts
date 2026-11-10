@@ -41,7 +41,7 @@ export default defineNuxtModule<ModuleOptions>({
       },
     },
     '@nuxt/ui': {
-      version: '>=4.0.1',
+      version: '>=4.12.0',
     },
   },
   async setup(options, nuxt) {

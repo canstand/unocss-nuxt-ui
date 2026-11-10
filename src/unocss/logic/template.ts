@@ -51,7 +51,7 @@ export function getNuxtUiUnoConfigTemplate(
     .join('\n')
 
   const imports = [
-    `import { defineConfig, mergeConfigs, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'`,
+    `import { cssIdRE, defineConfig, mergeConfigs, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'`,
     `import { presetNuxtUI } from 'unocss-nuxt-ui'`,
     ...layerConfigPaths.map((path, index) => `import layerConfig${index} from ${JSON.stringify(toTemplateImportPath(path, options.buildDir))}`),
   ]
@@ -79,6 +79,7 @@ export function getNuxtUiUnoConfigTemplate(
 ${defaultIncludes}
 ${pipelineIncludes}
       ],
+      exclude: [cssIdRE],
     },
   },
   outputToCssLayers: true,

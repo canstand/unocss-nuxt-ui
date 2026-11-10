@@ -1,5 +1,7 @@
+import { cssIdRE } from '@unocss/core'
 import { describe, expect, it } from 'vitest'
-import { getRequiredNuxtUiPipelineInclude } from '../../src/unocss/logic/defaults'
+import { applyNuxtUiUnoDefaults, getRequiredNuxtUiPipelineInclude } from '../../src/unocss/logic/defaults'
+import { getNuxtUiUnoConfigTemplate } from '../../src/unocss/logic/template'
 
 describe('nuxt UI pipeline include selection', () => {
   it('returns required includes', () => {
@@ -20,5 +22,42 @@ describe('nuxt UI pipeline include selection', () => {
         return false
       }), `Pattern should match ${path}`).toBe(true)
     }
+  })
+})
+
+describe('pipeline exclude defaults', () => {
+  it('restores the default exclude when the config has an empty list', () => {
+    const config: Record<string, any> = {
+      content: {
+        pipeline: {
+          include: [/\.vue$/],
+          exclude: [],
+        },
+      },
+    }
+
+    applyNuxtUiUnoDefaults(config)
+
+    expect(config.content.pipeline.exclude).toEqual([cssIdRE])
+  })
+
+  it('keeps user-provided excludes', () => {
+    const exclude = [/\.custom$/]
+    const config: Record<string, any> = {
+      content: {
+        pipeline: {
+          include: [/\.vue$/],
+          exclude,
+        },
+      },
+    }
+
+    applyNuxtUiUnoDefaults(config)
+
+    expect(config.content.pipeline.exclude).toEqual(exclude)
+  })
+
+  it('adds the default exclude to the generated config template', () => {
+    expect(getNuxtUiUnoConfigTemplate()).toContain('exclude: [cssIdRE]')
   })
 })

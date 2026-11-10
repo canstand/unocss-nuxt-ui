@@ -29,9 +29,9 @@ This project is inspired by [lehuuphuc/unocss-preset-nuxt-ui](https://github.com
 ## Requirements
 
 - `nuxt >= 4.1.0`
-- `@nuxt/ui >= 4.0.0`
-- `unocss >= 66.7.0`
-- `@unocss/nuxt >= 66.7.0`
+- `@nuxt/ui >= 4.12.0`
+- `unocss >= 66.12.0`
+- `@unocss/nuxt >= 66.12.0`
 
 ## Install
 
