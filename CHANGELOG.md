@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v1.3.0
+
+[compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.2.2...v1.3.0)
+
+### 🚀 Enhancements
+
+- Support Nuxt UI 4.12 and refresh playground ([a914226](https://github.com/canstand/unocss-nuxt-ui/commit/a914226))
+
+### 🏡 Chore
+
+- Update deps and playground ([fb638f7](https://github.com/canstand/unocss-nuxt-ui/commit/fb638f7))
+
+### ❤️ Contributors
+
+- Can Stand <canstand@outlook.com>
+
 ## v1.2.2
 
 [compare changes](https://github.com/canstand/unocss-nuxt-ui/compare/v1.2.1...v1.2.2)
